@@ -24,6 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.13.1",
+    "express": "^4.14.0",
     "raven-js": "^3.5.1",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",

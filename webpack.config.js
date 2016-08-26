@@ -1,3 +1,4 @@
+var Webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -17,10 +18,15 @@ module.exports = {
     },
     module: {
         loaders: [
-            {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"}
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader"
+            }
         ]
     },
     plugins: [
-        HtmlWebpackPluginConfig
+        HtmlWebpackPluginConfig,
+        new Webpack.HotModuleReplacementPlugin()
     ]
 };
