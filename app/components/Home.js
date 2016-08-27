@@ -1,10 +1,10 @@
 import React from 'react';
 
 export default React.createClass({
-    render: function() {
+    render () {
         return(
 
-            <p className='text-success'>This is our home page</p>
+            <p className='text-success'>this is our home page!!!!</p>
         )
     }
 
