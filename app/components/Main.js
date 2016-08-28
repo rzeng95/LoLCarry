@@ -1,11 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 export default React.createClass({
     render () {
         return(
 
             <div className='main-container'>
-                <p className='text-primary'>Main.js wraps everything...</p>
+                <h1>
+                    <Link to='/'>LoLCarry</Link>
+                </h1>
                 {this.props.children}
             </div>
         )

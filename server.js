@@ -4,8 +4,9 @@ var app = express();
 var PORT = process.env.PORT || 8080;
 var ENV = ( process.env.NODE_ENV || 'development' ).trim();
 
+var fallback = require('express-history-api-fallback')
+
 if(ENV.trim() !== 'production') {
-    console.log("hot module replacement on");
     var webpackDevMiddleware = require('webpack-dev-middleware');
     var webpackHotMiddleware = require('webpack-hot-middleware');
     var webpack = require('webpack');
@@ -22,10 +23,18 @@ if(ENV.trim() !== 'production') {
 }
 
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(fallback('index.html', { root: path.join(__dirname + '/dist') }))
 
-app.get('/', function(request, response) {
-    response.sendFile(__dirname + '/dist/index.html')
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/dist/index.html')
 });
+
+
+app.get('/api/test', function(req, res) {
+
+    res.send("hello");
+})
+
 
 
 app.listen(PORT, function(error) {

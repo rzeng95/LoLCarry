@@ -1,11 +1,14 @@
 import React from 'react';
 
+import SearchContainer from '../containers/SearchContainer';
+
 export default React.createClass({
     render () {
         return(
-
-            <p className='text-success'>this is our home page</p>
+            <div>
+                <p>Home page here</p>
+                <SearchContainer />
+            </div>
         )
     }
-
 });
