@@ -4,7 +4,15 @@ var app = express();
 var PORT = process.env.PORT || 8080;
 var ENV = ( process.env.NODE_ENV || 'development' ).trim();
 
-var fallback = require('express-history-api-fallback')
+var fallback = require('express-history-api-fallback');
+
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+require('./server/api')(app);
 
 if(ENV.trim() !== 'production') {
     var webpackDevMiddleware = require('webpack-dev-middleware');
@@ -28,13 +36,6 @@ app.use(fallback('index.html', { root: path.join(__dirname + '/dist') }))
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/dist/index.html')
 });
-
-
-app.get('/api/test', function(req, res) {
-
-    res.send("hello");
-})
-
 
 
 app.listen(PORT, function(error) {

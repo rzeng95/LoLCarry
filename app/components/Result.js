@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CurrentTable from './CurrentTable';
+import CurrentTableContainer from '../containers/CurrentTableContainer';
 import CurrentStatistics from './CurrentStatistics';
 
 function Result(props) {
@@ -10,7 +10,7 @@ function Result(props) {
             Showing current game info for: {props.params.player} ( {props.params.region} )
             </h3>
 
-            <CurrentTable />
+            <CurrentTableContainer />
             <CurrentStatistics />
         </div>
     )
