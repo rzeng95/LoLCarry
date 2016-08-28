@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 require('./server/api')(app);
 
-if(ENV.trim() !== 'production') {
+if(ENV !== 'production') {
     var webpackDevMiddleware = require('webpack-dev-middleware');
     var webpackHotMiddleware = require('webpack-hot-middleware');
     var webpack = require('webpack');
@@ -28,6 +28,7 @@ if(ENV.trim() !== 'production') {
 
     app.use(middleware);
     app.use(webpackHotMiddleware(compiler));
+
 }
 
 app.use(express.static(path.join(__dirname, 'dist')));

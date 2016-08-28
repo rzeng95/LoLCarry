@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 
-import CurrentTable from '../components/CurrentTable';
+import CurrentStatistics from '../components/CurrentStatistics';
 
 import axios from 'axios';
 
-class CurrentTableContainer extends Component {
+class CurrentStatisticsContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,7 +12,7 @@ class CurrentTableContainer extends Component {
         }
     }
     componentDidMount() {
-        console.log('table component mounted');
+        console.log('stats component mounted');
 
         axios.get('/api/test')
             .then(function (res) {
@@ -21,7 +21,7 @@ class CurrentTableContainer extends Component {
             .then(
                 () => {
                     this.setState({
-                        isLoading : false // set to true to test load animation
+                        isLoading : true // set to true to test load animation
                     })
                 }
 
@@ -37,10 +37,10 @@ class CurrentTableContainer extends Component {
     }
     render() {
         return (
-            <CurrentTable
+            <CurrentStatistics
             isLoading = {this.state.isLoading} />
         );
     }
 }
 
-export default CurrentTableContainer;
+export default CurrentStatisticsContainer;

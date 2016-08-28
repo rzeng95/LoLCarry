@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CurrentTableContainer from '../containers/CurrentTableContainer';
-import CurrentStatistics from './CurrentStatistics';
+import CurrentStatisticsContainer from '../containers/CurrentStatisticsContainer';
 
 function Result(props) {
     return (
@@ -11,7 +11,10 @@ function Result(props) {
             </h3>
 
             <CurrentTableContainer />
-            <CurrentStatistics />
+            <h3>
+            Statistics About Players
+            </h3>
+            <CurrentStatisticsContainer />
         </div>
     )
 }
