@@ -6,13 +6,12 @@ var ENV = ( process.env.NODE_ENV || 'development' ).trim();
 
 var fallback = require('express-history-api-fallback');
 
-var bodyParser = require('body-parser');
 var morgan = require('morgan');
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 require('./server/api')(app);
+
+// TO WORK ON THE API ONLY, COMMENT FROM THIS LINE...
 
 if(ENV !== 'production') {
     var webpackDevMiddleware = require('webpack-dev-middleware');
@@ -38,6 +37,9 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/dist/index.html')
 });
 
+// ... TO THIS LINE. 
+// Don't forget to npm install -g nodemon!
+// And run the server with nodemon ./server.js
 
 app.listen(PORT, function(error) {
     if (error) {
