@@ -13,32 +13,32 @@ class CurrentTableContainer extends Component {
     }
     componentDidMount() {
         console.log('table component mounted');
-
-        axios.get('/api/test')
+        axios.get(`/api/getCurrentGame/${this.props.region}/${this.props.name}`)
             .then(function (res) {
                 console.log(res.data);
+                return res;
             })
             .then(
-                () => {
+                (res) => {
                     this.setState({
-                        isLoading : false // set to true to test load animation
+                        isLoading : false, // set to true to test load animation,
+                        blob : res.data
                     })
                 }
 
             )
-            .catch(function(res) {
-                if(res instanceof Error) {
-                  console.log(res.message);
-                } else {
-                  console.log(res.data);
+            .catch(
+                (err) => {
+                    console.log(err)
                 }
-            })
+            )
 
     }
     render() {
         return (
             <CurrentTable
-            isLoading = {this.state.isLoading} />
+            isLoading = {this.state.isLoading}
+            blob={this.state.blob} />
         );
     }
 }

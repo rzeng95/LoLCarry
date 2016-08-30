@@ -10,7 +10,9 @@ function Result(props) {
             Showing current game info for: {props.params.player} ( {props.params.region} )
             </h3>
 
-            <CurrentTableContainer />
+            <CurrentTableContainer
+            region={props.params.region}
+            name={props.params.player} />
             <h3>
             Statistics About Players
             </h3>

@@ -18,24 +18,24 @@ function CurrentTable (props) {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Player 1</td>
-                        <td>Player 6</td>
+                        <td>{props.blob.participants[0].summonerName}</td>
+                        <td>{props.blob.participants[5].summonerName}</td>
                     </tr>
                     <tr>
-                        <td>Player 2</td>
-                        <td>Player 7</td>
+                        <td>{props.blob.participants[1].summonerName}</td>
+                        <td>{props.blob.participants[6].summonerName}</td>
                     </tr>
                     <tr>
-                        <td>Player 3</td>
-                        <td>Player 8</td>
+                        <td>{props.blob.participants[2].summonerName}</td>
+                        <td>{props.blob.participants[7].summonerName}</td>
                     </tr>
                     <tr>
-                        <td>Player 4</td>
-                        <td>Player 9</td>
+                        <td>{props.blob.participants[3].summonerName}</td>
+                        <td>{props.blob.participants[8].summonerName}</td>
                     </tr>
                     <tr>
-                        <td>Player 5</td>
-                        <td>Player 10</td>
+                        <td>{props.blob.participants[4].summonerName}</td>
+                        <td>{props.blob.participants[9].summonerName}</td>
                     </tr>
                 </tbody>
             </table>
