@@ -3,13 +3,13 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import Main from '../components/Main';
 import Home from '../components/Home';
-import Result from '../components/Result';
+import ResultContainer from '../containers/ResultContainer';
 
 var routes = (
     <Router history={browserHistory}>
         <Route path='/' component={Main}>
             <IndexRoute component={Home} />
-            <Route path="/:region/:player" component={Result} />
+            <Route path="/:region/:player" component={ResultContainer} />
         </Route>
     </Router>
 

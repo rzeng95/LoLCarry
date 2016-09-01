@@ -5,14 +5,18 @@ import CurrentStatisticsContainer from '../containers/CurrentStatisticsContainer
 
 function Result(props) {
     return (
-        <div>
+
+        props.incorrectRegion === true
+        ? <p>Please input a valid region in the URL</p>
+        : <div>
+
             <h3>
-            Showing current game info for: {props.params.player} ( {props.params.region} )
+            Showing current game info for: {props.player} ( {props.region} )
             </h3>
 
             <CurrentTableContainer
-            region={props.params.region}
-            name={props.params.player} />
+            region={props.region}
+            name={props.player} />
             <h3>
             Statistics About Players
             </h3>

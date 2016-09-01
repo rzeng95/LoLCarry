@@ -12,7 +12,6 @@ class CurrentTableContainer extends Component {
         }
     }
     componentDidMount() {
-        console.log('table component mounted');
         axios.get(`/api/getCurrentGame/${this.props.region}/${this.props.name}`)
             .then(
                 (res) => {

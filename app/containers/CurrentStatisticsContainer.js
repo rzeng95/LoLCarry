@@ -12,8 +12,6 @@ class CurrentStatisticsContainer extends Component {
         }
     }
     componentDidMount() {
-        console.log('stats component mounted');
-
         axios.get('/api/test')
             .then(function (res) {
                 console.log(res.data);
