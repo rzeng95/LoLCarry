@@ -24,7 +24,7 @@ function handleError(err, callback) {
             break;
         case 2.1:
             if (status === 403) result = 'Forbidden request. Oops! [2.1]';
-            else if (status === 404) result = 'This summoner is not currently in-game.';
+            else if (status === 404) result = 'This summoner is currently not in-game.';
             else if (status === 429) result = 'Rate limit exceeded. Oops! [2.1]';
             else if (status === 500) result = 'Internal issues. Oops! [1.1]';
             else result = 'Unexpected error: ' + status + ' [2.1]';

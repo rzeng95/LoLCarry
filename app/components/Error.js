@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 function Error(props) {
 
     return (
-        <p>{props.text}</p>
+        <p><b>{props.text}</b></p>
     );
 
 }
