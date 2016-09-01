@@ -37,7 +37,7 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/dist/index.html')
 });
 
-// ... TO THIS LINE. 
+// ... TO THIS LINE.
 // Don't forget to npm install -g nodemon!
 // And run the server with nodemon ./server.js
 

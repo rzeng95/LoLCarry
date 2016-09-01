@@ -9,19 +9,53 @@ var constants = require('./constants');
 var apiVersions = constants.apiVersions;
 var regionMap = constants.regions;
 
+var utf8 = require('utf8');
+
 // This will later be swapped out for a production key and will be reset
 var DEV_KEY = 'RGAPI-3133196D-8C91-49C0-BB1C-8391D2C0080F';
 var API_KEY = DEV_KEY;
 
 
+
+// This exception is thrown on non-200 requests from Riot's API
+// Status is the status code returned (404)
+// Message is only if a non-header status is returned
+// Example below:
+// Note that if we have an error with a response status, we send that back
+// Otherwise, we sent the full error message
+// The code (1.1, 1.2) allows us to pinpoint where exactlly the error was thrown
+
+// return getSummonerID(cleanedRegion, cleanedName)
+// .catch(function(err){
+//     if (err.response) {
+//         throw new APIException(1.1, err.response.status, null);
+//     } else {
+//         throw new APIException(1.2, null, err.message);
+//     }
+
+function APIException(code, status, message) {
+    this.code = code;
+    this.status = status;
+    this.message = message;
+}
+
+
+
+
 // Clean names by removing weird characters / converting them to utf-8 format
-// Lowercase the region (this is only if the user
-// types in a capitalized region in the URL)
+// Lowercase the region and remove spaces
+// Lowercase the username and convert to utf-8
+
 function getCleanInputs(regionRaw, nameRaw) {
 
-    // ToDo
-    var regionCleaned = regionRaw;
-    var nameCleaned = nameRaw;
+    var regionCleaned = regionRaw.replace(/\s+/g, '').toLowerCase();
+    var nameCleaned = nameRaw.replace(/\s+/g, '').toLowerCase();
+
+    // Ignore invalid characters
+    nameCleaned = nameCleaned.replace(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/gi, '');
+
+    // Utf8-encode (Allows korean character recognition)
+    nameCleaned = utf8.encode(nameCleaned) ;
 
     return [regionCleaned, nameCleaned];
 }
@@ -45,7 +79,7 @@ function getCurrentGame(region, summonerID) {
     var url = 'https://' + region + '.api.pvp.net/observer-mode/rest/' +
     'consumer/getSpectatorGameInfo/' + regionMap[region] + '/' +
     summonerID + '?api_key=' + API_KEY;
-    
+
     return axios.get(url);
 }
 
@@ -58,22 +92,38 @@ var helpers = {
 
         return getSummonerID(cleanedRegion, cleanedName)
 
-        .then(function(res){
-            return getCurrentGame( cleanedRegion, res.data[cleanedName].id );
-        })
+            .catch(function(err){
+                if (err.response) {
+                    throw new APIException(1.1, err.response.status, null);
+                } else {
+                    throw new APIException(1.2, null, err.message);
+                }
+            })
 
-        .then(function(res){
-            // When we are here, this contains the current match info
-            // console.log(res.data);
-            return res.data
-        })
+            .then(function(res){
+                // If we are here, then we've successfully acquired a summonerID
+                var summonerID = res.data[cleanedName].id;
 
-        .catch(function(err){
-            console.log("error happened somewhere along the chain")
-            console.log(err);
-        })
+                return getCurrentGame(cleanedRegion, summonerID)
+
+                    .catch(function(err){
+                        if (err.response) {
+                            throw new APIException(2.1, err.response.status, null);
+                        } else {
+                            throw new APIException(2.2, null, err.message);
+                        }
+                    })
+
+                    .then(function(res){
+                        // If we are here, res.data contains the current match info
+                        return res.data;
+                    })
+
+            })
 
     },
+
+
     fetchPlayerStatistics: function() {
         return "ToDo";
     }

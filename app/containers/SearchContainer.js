@@ -9,8 +9,13 @@ class SearchContainer extends Component {
     }
     handleSubmitSummoner(e) {
         e.preventDefault();
-        const summonerName = e.target.elements[0].value;
+        let summonerName = e.target.elements[0].value;
         const summonerRegion = e.target.elements[1].value;
+
+        // Remove spaces from summoner name and remove invalid characters
+        summonerName = summonerName.replace(/\s+/g, '').toLowerCase();
+        summonerName = summonerName.replace(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/gi, '');
+
         const path = `/${summonerRegion}/${summonerName}`
         this.context.router.push(path);
 

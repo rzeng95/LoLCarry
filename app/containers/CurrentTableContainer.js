@@ -14,10 +14,6 @@ class CurrentTableContainer extends Component {
     componentDidMount() {
         console.log('table component mounted');
         axios.get(`/api/getCurrentGame/${this.props.region}/${this.props.name}`)
-            .then(function (res) {
-                console.log(res.data);
-                return res;
-            })
             .then(
                 (res) => {
                     this.setState({
@@ -29,7 +25,10 @@ class CurrentTableContainer extends Component {
             )
             .catch(
                 (err) => {
-                    console.log(err)
+                    this.errorMessage = err.response.data;
+                    this.setState({
+                        isLoading : false
+                    })
                 }
             )
 
@@ -38,7 +37,8 @@ class CurrentTableContainer extends Component {
         return (
             <CurrentTable
             isLoading = {this.state.isLoading}
-            blob={this.state.blob} />
+            blob={this.state.blob}
+            errorMessage={this.errorMessage} />
         );
     }
 }
