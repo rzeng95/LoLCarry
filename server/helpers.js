@@ -124,7 +124,7 @@ var helpers = {
     },
 
 
-    fetchPlayerStatistics: function() {
+    fetchPlayerAnalysis: function() {
         return "ToDo";
     }
 

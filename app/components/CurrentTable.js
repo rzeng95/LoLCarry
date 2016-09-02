@@ -3,6 +3,8 @@ import React, { PropTypes } from 'react';
 import Loading from './Loading';
 import Error from './Error';
 
+import CurrentAnalysisContainer from '../containers/CurrentAnalysisContainer';
+
 function CurrentTable (props) {
 
     return (
@@ -12,7 +14,7 @@ function CurrentTable (props) {
             ? <Error text={props.errorMessage} />
             :
             <div>
-                <h3>current game info table</h3>
+                <h4><b>Current Game</b></h4>
                 <table className="table table-bordered">
                     <thead>
                         <tr>
@@ -43,6 +45,9 @@ function CurrentTable (props) {
                         </tr>
                     </tbody>
                 </table>
+
+                <CurrentAnalysisContainer />
+
             </div>
     );
 

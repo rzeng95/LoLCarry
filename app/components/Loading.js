@@ -29,7 +29,7 @@ class Loading extends Component {
     }
     render () {
         return (
-            <p><b>{this.state.text}</b></p>
+            <h4><b>{this.state.text}</b></h4>
         )
     }
 }

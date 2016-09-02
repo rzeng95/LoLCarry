@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 
-import CurrentStatistics from '../components/CurrentStatistics';
+import CurrentAnalysis from '../components/CurrentAnalysis';
 
 import axios from 'axios';
 
-class CurrentStatisticsContainer extends Component {
+class CurrentAnalysisContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,8 +19,9 @@ class CurrentStatisticsContainer extends Component {
             .then(
                 () => {
                     this.setState({
-                        isLoading : true // set to true to test load animation
+                        isLoading : false
                     })
+
                 }
 
             )
@@ -35,10 +36,10 @@ class CurrentStatisticsContainer extends Component {
     }
     render() {
         return (
-            <CurrentStatistics
+            <CurrentAnalysis
             isLoading = {this.state.isLoading} />
         );
     }
 }
 
-export default CurrentStatisticsContainer;
+export default CurrentAnalysisContainer;

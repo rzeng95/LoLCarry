@@ -13,7 +13,7 @@ function handleError(err, callback) {
         case 1.1:
             if (status === 400) result = 'Invalid request made. Oops! [1.1]';
             else if (status === 401) result = 'Out of date API key. Oops! [1.1]';
-            else if (status === 404) result = 'Could not find summoner!';
+            else if (status === 404) result = 'This summoner does not exist.';
             else if (status === 429) result = 'Rate limit exceeded. Oops! [1.1]';
             else if (status === 500) result = 'Internal issues. Oops! [1.1]';
             else if (status === 503) result = 'Unable to communicate with Riot API servers.';
