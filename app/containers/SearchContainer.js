@@ -6,6 +6,15 @@ class SearchContainer extends Component {
     constructor(props) {
         super(props);
         this.handleSubmitSummoner = this.handleSubmitSummoner.bind(this);
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.state = {
+            username: ''
+        };
+    }
+    handleTextChange(e) {
+        this.setState({
+            username: e.target.value
+        });
     }
     handleSubmitSummoner(e) {
         e.preventDefault();
@@ -16,14 +25,20 @@ class SearchContainer extends Component {
         summonerName = summonerName.replace(/\s+/g, '').toLowerCase();
         summonerName = summonerName.replace(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/gi, '');
 
+        this.setState({
+            username: ''
+        })
+
         const path = `/${summonerRegion}/${summonerName}`
         this.context.router.push(path);
-
     }
 
     render() {
         return (
-            <Search onSubmitSummoner={this.handleSubmitSummoner} />
+            <Search
+            username = {this.state.username}
+            onTextChange={this.handleTextChange}
+            onSubmitSummoner={this.handleSubmitSummoner} />
         );
     }
 }

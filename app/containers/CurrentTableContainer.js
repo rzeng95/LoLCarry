@@ -16,12 +16,12 @@ class CurrentTableContainer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("new props received");
+        //console.log("new props received");
         axios.get(`/api/getCurrentGame/${nextProps.region}/${nextProps.name}`)
             .then(
                 (res) => {
                     this.setState({
-                        isLoading : false, // set to true to test load animation,
+                        isLoading : false,
                         blob : res.data,
                         region: nextProps.region,
                         name: nextProps.name,
@@ -44,12 +44,12 @@ class CurrentTableContainer extends Component {
     }
 
     componentDidMount() {
-        console.log("initial mount")
+        //console.log("initial mount")
         axios.get(`/api/getCurrentGame/${this.state.region}/${this.state.name}`)
             .then(
                 (res) => {
                     this.setState({
-                        isLoading : false, // set to true to test load animation,
+                        isLoading : false,
                         blob : res.data,
                         errorMessage: null
                     })

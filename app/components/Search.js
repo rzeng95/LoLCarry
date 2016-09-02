@@ -5,7 +5,7 @@ function Search (props) {
 
         <form className="navbar-form navbar-right" style={{"paddingTop":"15px"}} onSubmit = {props.onSubmitSummoner}>
             <div className="form-group">
-                <input type="text" className="form-control" style={{"borderRadius":"0"}} placeholder="Summoner Name" />
+                <input type="text" className="form-control" style={{"borderRadius":"0"}} placeholder="Summoner Name" value={props.username} onChange={props.onTextChange}/>
             </div>
             <select className="form-control" style={{"borderRadius":"0"}}>
                 <option value="na">NA</option>
