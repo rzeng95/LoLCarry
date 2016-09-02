@@ -83,6 +83,17 @@ function getCurrentGame(region, summonerID) {
     return axios.get(url);
 }
 
+// ========================= GET CHALLENGER LIST ===============================
+function getChallengerList(region) {
+    var version = apiVersions.challengerListVersion;
+    var url = 'https://' + region + '.api.pvp.net/api/lol/' + region + '/v' +
+    version + '/league/challenger?type=RANKED_SOLO_5x5&api_key=' + API_KEY;
+
+    console.log(url);
+
+    return axios.get(url);
+}
+
 var helpers = {
 
     fetchCurrentGame: function(region, name) {
@@ -126,7 +137,24 @@ var helpers = {
 
     fetchPlayerAnalysis: function() {
         return "ToDo";
+    },
+
+    fetchChallengersInGame: function(region) {
+
+        return getChallengerList(region)
+            .then(function(res) {
+                return res.data;
+            })
+            .catch(function(err) {
+                if (err.response) {
+                    throw new APIException(4.1, err.response.status, null);
+                } else {
+                    throw new APIException(4.2, null, err.message);
+                }
+            })
+
     }
+
 
 };
 

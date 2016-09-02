@@ -13,7 +13,8 @@ var constants = {
         'ru': 'RU'
     },
     apiVersions: {
-        summonerByNameVersion: 1.4
+        summonerByNameVersion: 1.4,
+        challengerListVersion: 2.5
     }
 }
 

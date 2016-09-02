@@ -27,11 +27,21 @@ function handleError(err, callback) {
             if (status === 403) result = 'Forbidden request. Oops! [2.1]';
             else if (status === 404) result = 'This summoner is currently not in-game.';
             else if (status === 429) result = 'Rate limit exceeded. Oops! [2.1]';
-            else if (status === 500) result = 'Internal issues. Oops! [1.1]';
+            else if (status === 500) result = 'Internal issues. Oops! [2.1]';
             else result = 'Unexpected error: ' + status + ' [2.1]';
             break;
         case 2.2:
             result = 'Unexpected error with server. Try again later [2.2]';
+            break;
+        case 4.1:
+            if (status === 400) result = 'Invalid request made. Oops! [4.1]';
+            else if (status === 403) result = 'Forbidden request. Oops! [4.1]';
+            else if (status === 500) result = 'Internal issues. Oops! [4.1]';
+            else if (status === 503) result = 'Unable to communicate with Riot API servers.';
+            else result = 'Unexpected error: ' + status + ' [4.1]';
+            break;
+        case 4.2:
+            result = 'Unexpected error with server. Try again later [4.2]';
             break;
         default:
             result = '';
@@ -79,9 +89,42 @@ module.exports = function(app) {
                         });
                     })
             }
-        })
+        });
 
     })
+
+    app.get('/api/getChallengerList/:region', function(req,res) {
+        limiter.removeTokens(1, function(err1, remainingRequests) {
+            if (remainingRequests < 0) {
+                printError('Internal rate limit reached', 'getCurrentGame'); // this is debug code
+
+                res.status(429).send('Internal rate limit reached. Please try again in a few minutes.');
+            } else {
+                helpers.fetchChallengersInGame(req.params.region)
+                .then(function(blob) {
+
+                    var challengerList = blob.entries;
+
+                    challengerList.sort(function(a,b) {
+                        return b.leaguePoints - a.leaguePoints
+                    })
+
+                    res.send(challengerList)
+                })
+                .catch(function(err2) {
+                    handleError(err2, function(msg) {
+                        res.status(404).send(msg);
+                    });
+                })
+            }
+        });
+
+    })
+
+
+
+
+
 
     app.get('/api/test', function(req, res) {
         res.send("hello");
