@@ -25,9 +25,13 @@ class SearchContainer extends Component {
         summonerName = summonerName.replace(/\s+/g, '').toLowerCase();
         summonerName = summonerName.replace(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/gi, '');
 
+        // reset text field after successful submission
         this.setState({
             username: ''
         })
+
+        // If totally invalid input ('', '!!!', etc, then don't do anything at all)
+        if (summonerName === '') return false;
 
         const path = `/${summonerRegion}/${summonerName}`
         this.context.router.push(path);
