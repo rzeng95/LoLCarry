@@ -10,7 +10,7 @@ function CurrentAnalysis (props) {
         : <div>
             <h4><b>Player Analysis</b></h4>
             <br />
-            <p>Not implemented yet :(</p>
+            <p>Not Available Yet.</p>
 
 
         </div>

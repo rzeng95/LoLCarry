@@ -1,7 +1,8 @@
 var helpers = require('./helpers');
 
-
-
+var RateLimiter  = require('limiter').RateLimiter;
+// Dev key allows us 10 requests per 10 seconds (10 000 ms)
+var limiter = new RateLimiter(9, 10000, true);
 
 function handleError(err, callback) {
     var code = err.code;
@@ -58,18 +59,28 @@ module.exports = function(app) {
         var regionRaw = req.params.region;
         var nameRaw = req.params.summonerName;
 
-        helpers.fetchCurrentGame(regionRaw, nameRaw)
-            .then(function(blob){
-                res.json(blob);
-            })
-            .catch(function(err){
+        limiter.removeTokens(2, function(err1, remainingRequests) {
+            if (remainingRequests < 0) {
 
-                printError(err, 'getCurrentGame'); // this is debug code
+                printError('Internal rate limit reached', 'getCurrentGame'); // this is debug code
 
-                handleError(err, function(msg) {
-                    res.status(404).send(msg);
-                });
-            })
+                res.status(429).send('Internal rate limit reached. Please try again in a few minutes.');
+            } else {
+                helpers.fetchCurrentGame(regionRaw, nameRaw)
+                    .then(function(blob){
+                        res.json(blob);
+                    })
+                    .catch(function(err2){
+
+                        printError(err2, 'getCurrentGame'); // this is debug code
+
+                        handleError(err2, function(msg) {
+                            res.status(404).send(msg);
+                        });
+                    })
+            }
+        })
+
     })
 
     app.get('/api/test', function(req, res) {
