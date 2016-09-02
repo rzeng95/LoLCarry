@@ -14,23 +14,25 @@ function Home(props) {
                 <br />
                 <h4><b>List of Challenger NA Solo Queue Players</b></h4>
                 <br />
-                <table className="table table-bordered">
+                <table className="table table-bordered text-center">
                     <thead>
                         <tr>
-                            <th>Player</th>
-                            <th>LP</th>
-                            <th>W/L</th>
+                            <th style={{"text-align":"center"}}>Rank</th>
+                            <th style={{"text-align":"center"}}>Player</th>
+                            <th style={{"text-align":"center"}}>LP</th>
+                            <th style={{"text-align":"center"}}>W/L</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {props.blob.map(function(player, i){
                             return <PlayerWrapper
-                            key={i}
-                            playerName={player.playerOrTeamName}
-                            lp={player.leaguePoints}
-                            wins={player.wins}
-                            losses={player.losses}/>
+                                key={i}
+                                rank={i+1}
+                                playerName={player.playerOrTeamName}
+                                lp={player.leaguePoints}
+                                wins={player.wins}
+                                losses={player.losses}/>
                         })}
                     </tbody>
                 </table>

@@ -36,6 +36,7 @@ function handleError(err, callback) {
         case 4.1:
             if (status === 400) result = 'Invalid request made. Oops! [4.1]';
             else if (status === 403) result = 'Forbidden request. Oops! [4.1]';
+            else if (status === 429) result = 'Rate limit exceeded. Oops! [4.1]';
             else if (status === 500) result = 'Internal issues. Oops! [4.1]';
             else if (status === 503) result = 'Unable to communicate with Riot API servers.';
             else result = 'Unexpected error: ' + status + ' [4.1]';
