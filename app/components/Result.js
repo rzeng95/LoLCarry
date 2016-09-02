@@ -1,12 +1,19 @@
 import React from 'react';
 
+import Error from './Error'
+
 import CurrentTableContainer from '../containers/CurrentTableContainer';
 
 function Result(props) {
     return (
 
         props.incorrectRegion === true
-        ? <p>Please input a valid region in the URL</p>
+        ? <div>
+            <br />
+            <Error text= "Please input a valid region in the URL" />
+            <br />
+        </div>
+
         : <div>
 
             <br />
