@@ -9,7 +9,7 @@ function Main(props) {
     return(
         <div>
 
-            <div className="row" style={{ "backgroundColor":"#212121", "color":"#FFFFFF", "height":"80px" }}>
+            <div style={{ "backgroundColor":"#212121", "color":"#FFFFFF", "height":"80px" }}>
                 <div className="container">
                     <div className="col-xs-2 col-md-2">
                         <Link to='/'><h1>LoLCarry</h1></Link>
