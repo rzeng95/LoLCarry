@@ -10,17 +10,17 @@ function Home(props) {
         ? <div><br/><Loading text="Fetching Challenger List"/><br/></div>
         : props.errorMessage
             ? <div><br/><Error text={props.errorMessage} /><br/></div>
-            : <div>
+            :    <div id="challenger-list">
                 <br />
                 <h4><b>List of Challenger NA Solo Queue Players</b></h4>
                 <br />
                 <table className="table table-bordered text-center">
                     <thead>
                         <tr>
-                            <th style={{"text-align":"center"}}>Rank</th>
-                            <th style={{"text-align":"center"}}>Player</th>
-                            <th style={{"text-align":"center"}}>LP</th>
-                            <th style={{"text-align":"center"}}>W/L</th>
+                            <th style={{"textAlign":"center"}}>Rank</th>
+                            <th style={{"textAlign":"center"}}>Player</th>
+                            <th style={{"textAlign":"center"}}>LP</th>
+                            <th style={{"textAlign":"center"}}>W/L</th>
                         </tr>
                     </thead>
 
