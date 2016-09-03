@@ -10,7 +10,7 @@ function Home(props) {
         ? <div><br/><Loading text="Fetching Challenger List"/><br/></div>
         : props.errorMessage
             ? <div><br/><Error text={props.errorMessage} /><br/></div>
-            :    <div id="challenger-list">
+            :    <div id="scroll-list">
                 <br />
                 <h4><b>List of Challenger NA Solo Queue Players</b></h4>
                 <br />
