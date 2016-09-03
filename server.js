@@ -6,6 +6,8 @@ var ENV = ( process.env.NODE_ENV || 'development' ).trim();
 
 var fallback = require('express-history-api-fallback');
 
+app.use(express.static('public'));
+
 var morgan = require('morgan');
 app.use(morgan('dev'));
 
