@@ -54,10 +54,9 @@ function getCleanInputs(regionRaw, nameRaw) {
     // Ignore invalid characters
     nameCleaned = nameCleaned.replace(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/gi, '');
 
-    // Utf8-encode (Allows korean character recognition)
-    nameCleaned = utf8.encode(nameCleaned) ;
+    var nameUTF8 = utf8.encode(nameCleaned);
 
-    return [regionCleaned, nameCleaned];
+    return [regionCleaned, nameCleaned, nameUTF8];
 }
 
 // Get summoner info from region and summoner name (na, vanila)
@@ -67,7 +66,7 @@ function getSummonerID (region, name) {
     var version = apiVersions.summonerByNameVersion;
     var url = 'https://' + region + '.api.pvp.net/api/lol/' + region + '/v' +
                version + '/summoner/by-name/' + name + '?api_key=' + API_KEY;
-
+    console.log(url);
     return axios.get(url);
 }
 
@@ -89,8 +88,6 @@ function getChallengerList(region) {
     var url = 'https://' + region + '.api.pvp.net/api/lol/' + region + '/v' +
     version + '/league/challenger?type=RANKED_SOLO_5x5&api_key=' + API_KEY;
 
-    console.log(url);
-
     return axios.get(url);
 }
 
@@ -100,8 +97,9 @@ var helpers = {
 
         var cleanedRegion = getCleanInputs(region, name)[0];
         var cleanedName = getCleanInputs(region, name)[1];
+        var utf8Name = getCleanInputs(region, name)[2];
 
-        return getSummonerID(cleanedRegion, cleanedName)
+        return getSummonerID(cleanedRegion, utf8Name)
 
             .catch(function(err){
                 if (err.response) {
