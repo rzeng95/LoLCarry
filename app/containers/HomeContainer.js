@@ -15,12 +15,13 @@ class HomeContainer extends Component {
         axios.get('/api/getChallengerList/na')
             .then(
                 (res) => {
-
-                    this.setState({
-                        isLoading : false,
-                        blob: res.data,
-                        errorMessage: null
-                    })
+                    this.interval = setInterval( function() {
+                        this.setState({
+                            isLoading : false,
+                            blob: res.data,
+                            errorMessage: null
+                        })
+                    }.bind(this), 2800); //temporary to show loads 
 
                 }
 
@@ -35,6 +36,9 @@ class HomeContainer extends Component {
                 }
             )
 
+    }
+    componentWillUnmount () {
+        clearInterval(this.interval);
     }
     render() {
         return (

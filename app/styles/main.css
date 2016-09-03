@@ -24,3 +24,7 @@ a:active {
     height:calc(100vh - 80px);
     overflow-x: hidden;
 }
+
+#spinner1 {float:left;}
+#spinner2 {padding-left : 20px;float:left;}
+#spinner3 {padding-left : 24px;float:left;}

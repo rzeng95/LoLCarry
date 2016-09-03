@@ -1,5 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 
+import Spinner from 'react-spinkit';
+
+function Loading (props) {
+    return (
+        <div>
+            <h4><b>{props.text}</b></h4>
+            <Spinner spinnerName="rotating-plane" id="spinner1" />
+            <Spinner spinnerName="rotating-plane" id="spinner2" />
+            <Spinner spinnerName="rotating-plane" id="spinner3" />
+            <br />
+        </div>
+    );
+}
+
+Loading.defaultProps = {
+    text: 'Loading'
+};
+
+export default Loading;
+
+/*
 class Loading extends Component {
     constructor(props) {
         super(props);
@@ -40,3 +61,4 @@ Loading.defaultProps = {
 
 
 export default Loading;
+*/
