@@ -5,7 +5,7 @@ import Spinner from 'react-spinkit';
 function Loading (props) {
     return (
         <div>
-            <h4><b>{props.text}</b></h4>
+            <h3><b>{props.text}</b></h3>
             <Spinner spinnerName="rotating-plane" id="spinner1" />
             <Spinner spinnerName="rotating-plane" id="spinner2" />
             <Spinner spinnerName="rotating-plane" id="spinner3" />

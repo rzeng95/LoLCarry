@@ -8,7 +8,7 @@ function CurrentAnalysis (props) {
         props.isLoading === true
         ? <Loading text="Fetching Player Analysis"/>
         : <div>
-            <h4><b>Player Analysis</b></h4>
+            <h3><b>Player Analysis</b></h3>
             <br />
             <p>Not Available Yet.</p>
 

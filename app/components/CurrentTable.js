@@ -14,7 +14,7 @@ function CurrentTable (props) {
             ? <Error text={props.errorMessage} />
             :
             <div>
-                <h4><b>Current Game</b></h4>
+                <h3><b>Current Game</b></h3>
                 <table className="table table-bordered">
                     <thead>
                         <tr>

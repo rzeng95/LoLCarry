@@ -12,7 +12,7 @@ function Home(props) {
             ? <div><br/><Error text={props.errorMessage} /><br/></div>
             :    <div id="scroll-list">
                 <br />
-                <h4><b>List of Challenger NA Solo Queue Players</b></h4>
+                <h3><b>List of Challenger NA Solo Queue Players</b></h3>
                 <br />
                 <table className="table table-bordered text-center">
                     <thead>
