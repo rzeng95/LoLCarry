@@ -11,6 +11,7 @@ function Search (props) {
                 className="form-control"
                 style={{"borderRadius":"0", "margin":"2px"}}
                 placeholder="Summoner Name"
+                name="summoner"
                 value={props.username}
                 onChange={props.onTextChange}/>
             </div>
