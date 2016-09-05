@@ -1,5 +1,7 @@
 var helpers = require('./helpers');
 
+var ENV = ( process.env.NODE_ENV || 'development' ).trim();
+
 var RateLimiter  = require('limiter').RateLimiter;
 // Dev key allows us 10 requests per 10 seconds (10 000 ms)
 var limiter = new RateLimiter(9, 10000, true);
@@ -48,16 +50,19 @@ function handleError(err, callback) {
             result = '';
     }
 
-
     callback(result);
 
 }
 
 // This is purely debug code
 function printError(err, src) {
-    console.log('\nError detected in: ' + src);
-    console.log(err);
-    console.log('');
+    if (ENV === 'development' || ENV === 'server') {
+        console.log('\nError detected in: ' + src);
+        console.log(err);
+        console.log('');
+    } else {
+        return;
+    }
 }
 
 

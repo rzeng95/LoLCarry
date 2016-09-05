@@ -66,7 +66,7 @@ function getSummonerID (region, name) {
     var version = apiVersions.summonerByNameVersion;
     var url = 'https://' + region + '.api.pvp.net/api/lol/' + region + '/v' +
                version + '/summoner/by-name/' + name + '?api_key=' + API_KEY;
-    console.log(url);
+
     return axios.get(url);
 }
 

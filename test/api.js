@@ -7,7 +7,8 @@ var should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('API', () => {
+
+describe('API Status', () => {
 
     describe('GET /test', () => {
         it('assert that API is online', (done) => {
@@ -20,7 +21,5 @@ describe('API', () => {
                 });
         });
     });
-
-
 
 });
