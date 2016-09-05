@@ -97,7 +97,7 @@ module.exports = function(app) {
     app.get('/api/getChallengerList/:region', function(req,res) {
         limiter.removeTokens(1, function(err1, remainingRequests) {
             if (remainingRequests < 0) {
-                printError('Internal rate limit reached', 'getCurrentGame'); // this is debug code
+                printError('Internal rate limit reached', 'getChallengerList'); // this is debug code
 
                 res.status(429).send('Internal rate limit reached. Please try again in a few minutes.');
             } else {
@@ -110,9 +110,16 @@ module.exports = function(app) {
                         return b.leaguePoints - a.leaguePoints
                     })
 
+
+                    // perhaps this is where we axios spread
+                    //axios.spread
+
                     res.send(challengerList)
                 })
                 .catch(function(err2) {
+
+                    printError(err2, 'getChallengerList'); // this is debug code
+
                     handleError(err2, function(msg) {
                         res.status(404).send(msg);
                     });
@@ -126,9 +133,13 @@ module.exports = function(app) {
 
 
 
-
-    app.get('/api/test', function(req, res) {
-        res.send("hello");
+    app.get('/api/test', (req,res) => {
+        res.send('Hello!');
     })
+
+    app.get('/api/test', function(req,res){
+        res.send('Hello!');
+    })
+
 
 }
