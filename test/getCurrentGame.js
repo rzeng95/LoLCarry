@@ -1,16 +1,16 @@
 process.env.NODE_ENV = 'test';
 
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var server = require('../server.js');
-var should = chai.should();
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const server = require('../server');
+const should = chai.should();
 
 chai.use(chaiHttp);
 
 
 describe('Get Current Game', () => {
 
-    describe('GET /getCurrentGame/na/a#$^#^$#', () => {
+    describe('GET /api/getCurrentGame/na/a#$^#^$#', () => {
         it('Nonexistent player returns special 404', (done) => {
             chai.request(server)
                 .get('/api/getCurrentGame/na/a#$^#^$#')
@@ -22,7 +22,7 @@ describe('Get Current Game', () => {
         });
     });
 
-    describe('GET /getCurrentGame/na/vanila', () => {
+    describe('GET /api/getCurrentGame/na/vanila', () => {
         it('Existing not-in-game player returns special 404', (done) => {
             chai.request(server)
                 .get('/api/getCurrentGame/na/vanila')

@@ -15,7 +15,7 @@
     "start": "node ./server.js",
     "start-prod": "set NODE_ENV=production && node ./server.js",
     "server":"set NODE_ENV=server && nodemon ./server.js",
-    "test": "mocha --timeout 10000"
+    "test": "mocha --colors --timeout 10000"
   },
   "contributors": [
     {

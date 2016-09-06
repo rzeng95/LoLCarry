@@ -1,16 +1,18 @@
-var helpers = require('./helpers');
+'use strict';
 
-var ENV = ( process.env.NODE_ENV || 'development' ).trim();
+const helpers = require('./helpers');
 
-var RateLimiter  = require('limiter').RateLimiter;
+const ENV = ( process.env.NODE_ENV || 'development' ).trim();
+
+const RateLimiter  = require('limiter').RateLimiter;
 // Dev key allows us 10 requests per 10 seconds (10 000 ms)
-var limiter = new RateLimiter(9, 10000, true);
+const limiter = new RateLimiter(9, 10000, true);
 
 function handleError(err, callback) {
-    var code = err.code;
-    var status = err.status;
-    var message = err.message;
-    var result;
+    let code = err.code;
+    let status = err.status;
+    let message = err.message;
+    let result = '';
 
     switch(code) {
         case 1.1:
@@ -57,7 +59,7 @@ function handleError(err, callback) {
 // This is purely debug code
 function printError(err, src) {
     if (ENV === 'development' || ENV === 'server') {
-        console.log('\nError detected in: ' + src);
+        console.log(`\nError detected in: ${src}`)
         console.log(err);
         console.log('');
     } else {
@@ -70,12 +72,11 @@ function printError(err, src) {
 module.exports = function(app) {
 
     // Get current player's game using their summoner ID
-    // Catch if the player isn't in a game
-    app.get('/api/getCurrentGame/:region/:summonerName', function(req, res) {
-        var regionRaw = req.params.region;
-        var nameRaw = req.params.summonerName;
+    app.get('/api/getCurrentGame/:region/:summonerName', (req, res) => {
+        const regionRaw = req.params.region;
+        const nameRaw = req.params.summonerName;
 
-        limiter.removeTokens(2, function(err1, remainingRequests) {
+        limiter.removeTokens(2, (err1, remainingRequests) => {
             if (remainingRequests < 0) {
 
                 printError('Internal rate limit reached', 'getCurrentGame'); // this is debug code
@@ -83,68 +84,58 @@ module.exports = function(app) {
                 res.status(429).send('Internal rate limit reached. Please try again in a few minutes.');
             } else {
                 helpers.fetchCurrentGame(regionRaw, nameRaw)
-                    .then(function(blob){
+                    .then((blob) => {
                         res.json(blob);
                     })
-                    .catch(function(err2){
-
+                    .catch((err2) => {
                         printError(err2, 'getCurrentGame'); // this is debug code
 
-                        handleError(err2, function(msg) {
+                        handleError(err2, (msg) => {
                             res.status(404).send(msg);
                         });
                     })
             }
         });
 
-    })
+    });
 
-    app.get('/api/getChallengerList/:region', function(req,res) {
-        limiter.removeTokens(1, function(err1, remainingRequests) {
+
+    app.get('/api/getChallengerList/:region', (req, res) => {
+        limiter.removeTokens(1, (err1, remainingRequests) => {
             if (remainingRequests < 0) {
                 printError('Internal rate limit reached', 'getChallengerList'); // this is debug code
 
                 res.status(429).send('Internal rate limit reached. Please try again in a few minutes.');
             } else {
                 helpers.fetchChallengersInGame(req.params.region)
-                .then(function(blob) {
+                .then((blob) => {
+                    let challengerList = blob.entries;
 
-                    var challengerList = blob.entries;
-
-                    challengerList.sort(function(a,b) {
-                        return b.leaguePoints - a.leaguePoints
-                    })
-
-
+                    challengerList.sort((a,b) => {
+                        return b.leaguePoints - a.leaguePoints;
+                    });
                     // perhaps this is where we axios spread
                     //axios.spread
 
-                    res.send(challengerList)
+                    res.send(challengerList);
                 })
-                .catch(function(err2) {
+                .catch((err2) => {
 
                     printError(err2, 'getChallengerList'); // this is debug code
 
-                    handleError(err2, function(msg) {
+                    handleError(err2, (msg) => {
                         res.status(404).send(msg);
                     });
+
                 })
             }
         });
 
-    })
-
-
-
+    });
 
 
     app.get('/api/test', (req,res) => {
         res.send('Hello!');
-    })
-
-    app.get('/api/test', function(req,res){
-        res.send('Hello!');
-    })
-
+    });
 
 }

@@ -1,4 +1,4 @@
-var constants = {
+const constants = {
     regions: {
         'br': 'BR1',
         'eune': 'EUN1',
