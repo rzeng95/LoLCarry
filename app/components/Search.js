@@ -39,6 +39,10 @@ function Search (props) {
     );
 }
 
-// ToDo: add proptypes
+Search.propTypes = {
+    onSubmitSummoner : PropTypes.func.isRequired,
+    onTextChange : PropTypes.func.isRequired,
+    username : PropTypes.string
+}
 
 export default Search;

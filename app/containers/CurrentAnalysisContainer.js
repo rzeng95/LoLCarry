@@ -16,28 +16,21 @@ class CurrentAnalysisContainer extends Component {
             .then(function (res) {
                 console.log(res.data);
             })
-            .then(
-                () => {
-                    this.setState({
-                        isLoading : false
-                    })
+            .then(() => {
+                this.setState({
+                    isLoading : false
+                })
 
-                }
-
-            )
-            .catch(function(res) {
-                if(res instanceof Error) {
-                  console.log(res.message);
-                } else {
-                  console.log(res.data);
-                }
+            })
+            .catch((err) => {
+                console.log(err);
             })
 
     }
     render() {
         return (
             <CurrentAnalysis
-            isLoading = {this.state.isLoading} />
+            isLoading={this.state.isLoading} />
         );
     }
 }

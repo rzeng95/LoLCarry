@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Changelog(props) {
+function Changelog() {
 
     return (
         <div id="scroll-list">

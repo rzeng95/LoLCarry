@@ -28,19 +28,19 @@ class SearchContainer extends Component {
         // reset text field after successful submission
         this.setState({
             username: ''
-        })
+        });
 
         // If totally invalid input ('', '!!!', etc, then don't do anything at all)
         if (summonerName === '') return false;
 
-        const path = `/${summonerRegion}/${summonerName}`
+        const path = `/${summonerRegion}/${summonerName}`;
         this.context.router.push(path);
     }
 
     render() {
         return (
             <Search
-            username = {this.state.username}
+            username={this.state.username}
             onTextChange={this.handleTextChange}
             onSubmitSummoner={this.handleSubmitSummoner} />
         );
@@ -50,16 +50,5 @@ class SearchContainer extends Component {
 SearchContainer.contextTypes = {
     router: PropTypes.object.isRequired
 }
-
-/*
-SearchContainer.propTypes = {
-    summonerName: PropTypes.string.isRequired
-};
-
-SearchContainer.defaultProps = {
-    summonerName: ''
-};
-*/
-
 
 export default SearchContainer;

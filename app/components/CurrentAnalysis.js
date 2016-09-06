@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
 import Loading from './Loading';
 
@@ -16,6 +16,10 @@ function CurrentAnalysis (props) {
         </div>
     );
 
+}
+
+CurrentAnalysis.propTypes = {
+    isLoading : PropTypes.bool.isRequired
 }
 
 export default CurrentAnalysis;

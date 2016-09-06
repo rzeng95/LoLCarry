@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Error from './Error'
 
 import CurrentTableContainer from '../containers/CurrentTableContainer';
 
-function Result(props) {
+function Result (props) {
     return (
 
         props.incorrectRegion === true
@@ -25,7 +25,13 @@ function Result(props) {
             <br />
 
         </div>
-    )
+    );
+}
+
+Result.propTypes = {
+    incorrectRegion : PropTypes.bool.isRequired,
+    region          : PropTypes.string,
+    player          : PropTypes.string.isRequired
 }
 
 export default Result;

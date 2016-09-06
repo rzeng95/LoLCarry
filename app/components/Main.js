@@ -5,8 +5,8 @@ import SearchContainer from '../containers/SearchContainer';
 
 import '../styles/main.css';
 
-function Main(props) {
-    return(
+function Main (props) {
+    return (
         <div>
 
             <div id="header-bar">

@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
 import Spinner from 'react-spinkit';
 
@@ -15,8 +15,12 @@ function Loading (props) {
 }
 
 Loading.defaultProps = {
-    text: 'Loading'
+    text : 'Loading'
 };
+
+Loading.propTypes = {
+    text : PropTypes.string.isRequired
+}
 
 export default Loading;
 

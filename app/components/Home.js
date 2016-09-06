@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Loading from './Loading';
 import Error from './Error';
 import PlayerWrapper from './PlayerWrapper';
 
-function Home(props) {
-    return(
+function Home (props) {
+    return (
         props.isLoading === true
         ? <div><br/><Loading text="Fetching Challenger List"/><br/></div>
         : props.errorMessage
@@ -25,7 +25,7 @@ function Home(props) {
                     </thead>
 
                     <tbody>
-                        {props.blob.map(function(player, i){
+                        {props.blob.map((player, i) => {
                             return <PlayerWrapper
                                 key={i}
                                 rank={i+1}
@@ -39,7 +39,13 @@ function Home(props) {
 
 
             </div>
-    )
+    );
+}
+
+Home.propTypes = {
+    isLoading    : PropTypes.bool.isRequired,
+    errorMessage : PropTypes.string,
+    blob         : PropTypes.array
 }
 
 export default Home;

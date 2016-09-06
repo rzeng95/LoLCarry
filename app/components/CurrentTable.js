@@ -53,4 +53,10 @@ function CurrentTable (props) {
 
 }
 
-export default CurrentTable
+CurrentTable.propTypes = {
+    isLoading    : PropTypes.bool.isRequired,
+    errorMessage : PropTypes.string,
+    blob         : PropTypes.object
+}
+
+export default CurrentTable;

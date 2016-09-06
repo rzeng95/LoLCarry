@@ -9,37 +9,33 @@ class HomeContainer extends Component {
         super(props);
         this.state = {
             isLoading : true
-        }
+        };
     }
     componentDidMount() {
         axios.get('/api/getChallengerList/na')
-            .then(
-                (res) => {
-                    this.interval = setInterval( function() {
-                        this.setState({
-                            isLoading : false,
-                            blob: res.data,
-                            errorMessage: null
-                        })
-                    }.bind(this), 2800); //temporary to show loads 
-
-                }
-
-            )
-            .catch(
-                (err) => {
+            .then((res) => {
+                this.interval = setInterval( function() {
                     this.setState({
                         isLoading : false,
-                        blob: null,
-                        errorMessage : err.response.data
+                        blob: res.data,
+                        errorMessage: null
                     })
-                }
-            )
+                }.bind(this), 2000); //temporary to show loads
+            })
+            .catch((err) => {
+                this.setState({
+                    isLoading : false,
+                    blob: null,
+                    errorMessage : err.response.data
+                });
+            })
 
     }
-    componentWillUnmount () {
+
+    componentWillUnmount() {
         clearInterval(this.interval);
     }
+
     render() {
         return (
             <Home
