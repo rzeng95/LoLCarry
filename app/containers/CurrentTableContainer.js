@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import CurrentTable from '../components/CurrentTable';
+import CurrentTable from '../components/CurrentGameTableComponents/CurrentTable';
 
 import axios from 'axios';
 

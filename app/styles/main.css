@@ -50,10 +50,15 @@ a:active {
     margin-bottom: 0px;
 }
 
+.table table-nested {
+    padding-left: 0px;
+}
+
 .table-nested tbody tr td {
     border-top: none;
     font-size: 14px;
     text-align: center;
+    vertical-align: middle;
 }
 
 .table-nested thead tr th {
@@ -66,4 +71,11 @@ a:active {
     opacity:0.75;
     border-radius:6px;
     text-align: center;
+}
+
+
+
+.side-column {
+    padding-left: 2px;
+    padding-right: 2px;
 }
