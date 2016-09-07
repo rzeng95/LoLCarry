@@ -42,3 +42,6 @@ jspm_packages
 
 # React
 dist/
+
+# This is where the development key is stored
+SECRET.js

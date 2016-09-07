@@ -13,10 +13,9 @@ const regionMap = constants.regions;
 
 const utf8 = require('utf8');
 
-// This will later be swapped out for a production key and will be reset
-const DEV_KEY = 'RGAPI-3133196D-8C91-49C0-BB1C-8391D2C0080F';
-const API_KEY = DEV_KEY;
-
+// The real key has been uploaded as a Heroku config and is not availble.
+// For local development, the key is stored in gitignore'd file SECRET.js
+const API_KEY = process.env.API_KEY || require('../SECRET').DEV_LOCAL_KEY;
 
 
 // This exception is thrown on non-200 requests from Riot's API
