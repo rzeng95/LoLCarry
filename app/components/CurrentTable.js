@@ -3,10 +3,11 @@ import React, { PropTypes } from 'react';
 import Loading from './Loading';
 import Error from './Error';
 
+import Player from './Player';
+
 import CurrentAnalysisContainer from '../containers/CurrentAnalysisContainer';
 
 function CurrentTable (props) {
-
     return (
         props.isLoading === true
         ? <Loading text="Fetching Current Game Data"/>
@@ -24,24 +25,24 @@ function CurrentTable (props) {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{props.blob.participants[0].summonerName}</td>
-                            <td>{props.blob.participants[5].summonerName}</td>
+                            <td><Player playerBlob={props.blob.participants[0]} /></td>
+                            <td><Player playerBlob={props.blob.participants[5]} /></td>
                         </tr>
                         <tr>
-                            <td>{props.blob.participants[1].summonerName}</td>
-                            <td>{props.blob.participants[6].summonerName}</td>
+                            <td><Player playerBlob={props.blob.participants[1]} /></td>
+                            <td><Player playerBlob={props.blob.participants[6]} /></td>
                         </tr>
                         <tr>
-                            <td>{props.blob.participants[2].summonerName}</td>
-                            <td>{props.blob.participants[7].summonerName}</td>
+                            <td><Player playerBlob={props.blob.participants[2]} /></td>
+                            <td><Player playerBlob={props.blob.participants[7]} /></td>
                         </tr>
                         <tr>
-                            <td>{props.blob.participants[3].summonerName}</td>
-                            <td>{props.blob.participants[8].summonerName}</td>
+                            <td><Player playerBlob={props.blob.participants[3]} /></td>
+                            <td><Player playerBlob={props.blob.participants[8]} /></td>
                         </tr>
                         <tr>
-                            <td>{props.blob.participants[4].summonerName}</td>
-                            <td>{props.blob.participants[9].summonerName}</td>
+                            <td><Player playerBlob={props.blob.participants[4]} /></td>
+                            <td><Player playerBlob={props.blob.participants[9]} /></td>
                         </tr>
                     </tbody>
                 </table>

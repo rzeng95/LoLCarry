@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import Loading from './Loading';
 import Error from './Error';
-import PlayerWrapper from './PlayerWrapper';
+import ChallengerPlayerWrapper from './ChallengerPlayerWrapper';
 
 function Home (props) {
     return (
@@ -26,7 +26,7 @@ function Home (props) {
 
                     <tbody>
                         {props.blob.map((player, i) => {
-                            return <PlayerWrapper
+                            return <ChallengerPlayerWrapper
                                 key={i}
                                 rank={i+1}
                                 playerName={player.playerOrTeamName}

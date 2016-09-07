@@ -44,3 +44,26 @@ a:active {
     text-align: center;
     padding-top:23px;
 }
+
+/* Remove margins and stripes from Player nested table */
+.table-nested {
+    margin-bottom: 0px;
+}
+
+.table-nested tbody tr td {
+    border-top: none;
+    font-size: 14px;
+    text-align: center;
+}
+
+.table-nested thead tr th {
+    border-bottom: none;
+}
+
+.small-icon {
+    width: 28px;
+    height: 28px;
+    opacity:0.75;
+    border-radius:6px;
+    text-align: center;
+}

@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 import Loading from './Loading';
 
 function CurrentAnalysis (props) {
-    console.log(props)
     return (
         props.isLoading === true
         ? <Loading text="Fetching Player Analysis"/>

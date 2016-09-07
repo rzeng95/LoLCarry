@@ -44,7 +44,6 @@ class CurrentTableContainer extends Component {
                 } else {
                     isRanked = false;
                 }
-                console.log(isRanked)
                 this.setState({
                     isLoading : false,
                     blob : res.data,
