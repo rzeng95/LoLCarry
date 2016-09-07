@@ -4,6 +4,8 @@ import CurrentTable from '../components/CurrentTable';
 
 import axios from 'axios';
 
+import { gameModes } from '../../server/constants';
+
 class CurrentTableContainer extends Component {
     constructor(props) {
         super(props);
@@ -11,39 +13,36 @@ class CurrentTableContainer extends Component {
             isLoading : true,
             region: this.props.region,
             name: this.props.name,
-            errorMessage: null
+            errorMessage: null,
+            title: 'Unknown Game Mode'
         };
     }
-
+    // this updates the current game table if user enters a new search
     componentWillReceiveProps(nextProps) {
-        axios.get(`/api/getCurrentGame/${nextProps.region}/${nextProps.name}`)
-            .then((res) => {
-                this.setState({
-                    isLoading : false,
-                    blob : res.data,
-                    region: nextProps.region,
-                    name: nextProps.name,
-                    errorMessage: null
-                });
-            })
-            .catch((err) => {
-                this.setState({
-                    isLoading : false,
-                    region: nextProps.region,
-                    name: nextProps.name,
-                    errorMessage: err.response.data
-                });
-            })
-
+        this.getCurrentGame(nextProps.region, nextProps.name);
     }
 
     componentDidMount() {
-        axios.get(`/api/getCurrentGame/${this.state.region}/${this.state.name}`)
+        this.getCurrentGame(this.state.region, this.state.name);
+    }
+
+    getCurrentGame(region, name) {
+        axios.get(`/api/getCurrentGame/${region}/${name}`)
             .then((res) => {
+                let gameTitle = 'Custom Game';
+                if (res.data.gameQueueConfigId) {
+                    if (gameModes[res.data.gameQueueConfigId])  {
+                        gameTitle = gameModes[res.data.gameQueueConfigId];
+                    } else {
+                        gameTitle = gameModes[res.data.gameType];
+                    }
+                }
+
                 this.setState({
                     isLoading : false,
                     blob : res.data,
-                    errorMessage: null
+                    errorMessage: null,
+                    title : gameTitle
                 });
             })
             .catch((err) => {
@@ -60,6 +59,7 @@ class CurrentTableContainer extends Component {
             <CurrentTable
             isLoading={this.state.isLoading}
             blob={this.state.blob}
+            title={this.state.title}
             errorMessage={this.state.errorMessage} />
         );
     }

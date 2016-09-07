@@ -14,7 +14,7 @@ function CurrentTable (props) {
             ? <Error text={props.errorMessage} />
             :
             <div>
-                <h3><b>Current Game</b></h3>
+                <h3><b>{props.title}</b></h3>
                 <table className="table table-bordered">
                     <thead>
                         <tr>
@@ -56,7 +56,8 @@ function CurrentTable (props) {
 CurrentTable.propTypes = {
     isLoading    : PropTypes.bool.isRequired,
     errorMessage : PropTypes.string,
-    blob         : PropTypes.object
+    blob         : PropTypes.object,
+    title        : PropTypes.string.isRequired
 }
 
 export default CurrentTable;
