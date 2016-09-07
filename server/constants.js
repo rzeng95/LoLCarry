@@ -55,7 +55,9 @@ const constants = {
         317 : 'Definitely Not Dominion',
         400 : 'Normal 5v5',
         410 : 'Ranked 5v5'
-    }
+    },
+
+    rankedModes: [4, 42, 410]
 
 }
 

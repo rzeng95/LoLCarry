@@ -30,9 +30,14 @@ class CurrentAnalysisContainer extends Component {
     render() {
         return (
             <CurrentAnalysis
-            isLoading={this.state.isLoading} />
+            isLoading={this.state.isLoading}
+            isRanked={this.props.isRanked} />
         );
     }
 }
+
+CurrentAnalysisContainer.propTypes = {
+    isRanked : PropTypes.bool.isRequired
+};
 
 export default CurrentAnalysisContainer;

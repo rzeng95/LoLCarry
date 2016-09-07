@@ -45,8 +45,7 @@ function CurrentTable (props) {
                         </tr>
                     </tbody>
                 </table>
-
-                <CurrentAnalysisContainer />
+                <CurrentAnalysisContainer isRanked={props.isRanked}/>
 
             </div>
     );
@@ -57,7 +56,8 @@ CurrentTable.propTypes = {
     isLoading    : PropTypes.bool.isRequired,
     errorMessage : PropTypes.string,
     blob         : PropTypes.object,
-    title        : PropTypes.string.isRequired
+    title        : PropTypes.string.isRequired,
+    isRanked     : PropTypes.bool
 }
 
 export default CurrentTable;
