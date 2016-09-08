@@ -48,6 +48,12 @@ function handleError(err, callback) {
         case 4.2:
             result = 'Unexpected error with server. Try again later [4.2]';
             break;
+        case 5.1:
+            result = status + '[5.1]';
+            break;
+        case 5.2:
+            result = '[5.2]';
+            break;
         default:
             result = '';
     }
@@ -132,6 +138,22 @@ module.exports = function(app) {
         });
 
     });
+
+
+    app.get('/api/getChampion/:id', (req, res) => {
+        // no rate limiting required for this endnpoint (serves static data from Riot API)
+        helpers.fetchChampionById(req.params.id)
+            .then((name) => {
+                res.send(name);
+            })
+            .catch((err) => {
+                printError(err, 'getChampion');
+                handleError(err, (msg) => {
+                    res.status(404).send(msg);
+                });
+            })
+
+    })
 
 
     app.get('/api/test', (req,res) => {

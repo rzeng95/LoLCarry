@@ -152,6 +152,23 @@ const helpers = {
                 }
             })
 
+    },
+
+    fetchChampionById: function(id) {
+        const version = apiVersions.championStaticVersion;
+        const url = `https://global.api.pvp.net/api/lol/static-data/na/v${version}/champion/${id}?api_key=${API_KEY}`;
+
+        return axios.get(url)
+            .then((res) => {
+                return res.data.name;
+            })
+            .catch((err) => {
+                if (err.response) {
+                    throw new APIException(5.1, err.response.status, null);
+                } else {
+                    throw new APIException(5.2, null, err.message);
+                }
+            })
     }
 
 
