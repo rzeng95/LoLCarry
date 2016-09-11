@@ -4,29 +4,27 @@ import Error from './Error'
 
 import CurrentTableContainer from '../containers/CurrentTableContainer';
 
-function Result (props) {
-    return (
+const Result = (props) =>
 
-        props.incorrectRegion === true
-        ? <div>
-            <br />
-            <Error text= "Please input a valid region in the URL" />
-            <br />
-        </div>
+    props.incorrectRegion === true
+    ? <div>
+        <br />
+        <Error text= "Please input a valid region in the URL" />
+        <br />
+    </div>
 
-        : <div>
+    : <div>
 
-            <br />
+        <br />
 
-            <CurrentTableContainer
-            region={props.region}
-            name={props.player} />
+        <CurrentTableContainer
+        region={props.region}
+        name={props.player} />
 
-            <br />
+        <br />
 
-        </div>
-    );
-}
+    </div>
+
 
 Result.propTypes = {
     incorrectRegion : PropTypes.bool.isRequired,

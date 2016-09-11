@@ -2,17 +2,14 @@ import React, { PropTypes } from 'react';
 
 import Spinner from 'react-spinkit';
 
-function Loading (props) {
-    return (
-        <div>
-            <h3><b>{props.text}</b></h3>
-            <Spinner spinnerName="rotating-plane" id="spinner1" />
-            <Spinner spinnerName="rotating-plane" id="spinner2" />
-            <Spinner spinnerName="rotating-plane" id="spinner3" />
-            <br />
-        </div>
-    );
-}
+const Loading = (props) =>
+    <div>
+        <h3><b>{props.text}</b></h3>
+        <Spinner spinnerName="rotating-plane" id="spinner1" />
+        <Spinner spinnerName="rotating-plane" id="spinner2" />
+        <Spinner spinnerName="rotating-plane" id="spinner3" />
+        <br />
+    </div>
 
 Loading.defaultProps = {
     text : 'Loading'

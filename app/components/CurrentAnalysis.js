@@ -2,26 +2,24 @@ import React, { PropTypes } from 'react';
 
 import Loading from './Loading';
 
-function CurrentAnalysis (props) {
-    return (
-        props.isLoading === true
-        ? <Loading text="Fetching Player Analysis"/>
-        : props.isRanked === false
-            ? <div>
-                <h3><b>Player Analysis</b></h3>
-                <br />
-                <p>Player Analysis is only available for ranked game modes.</p>
-            </div>
-            : <div>
-                <h3><b>Player Analysis</b></h3>
-                <br />
-                <p>Not Available Yet.</p>
+const CurrentAnalysis = (props) =>
+
+    props.isLoading === true
+    ? <Loading text="Fetching Player Analysis"/>
+    : props.isRanked === false
+        ? <div>
+            <h3><b>Player Analysis</b></h3>
+            <br />
+            <p>Player Analysis is only available for ranked game modes.</p>
+        </div>
+        : <div>
+            <h3><b>Player Analysis</b></h3>
+            <br />
+            <p>Not Available Yet.</p>
 
 
-            </div>
-    );
+        </div>
 
-}
 
 CurrentAnalysis.propTypes = {
     isLoading : PropTypes.bool.isRequired,

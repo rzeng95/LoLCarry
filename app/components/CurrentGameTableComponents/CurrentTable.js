@@ -8,40 +8,40 @@ import TableColumn from './TableColumn';
 
 import CurrentAnalysisContainer from '../../containers/CurrentAnalysisContainer';
 
-function CurrentTable (props) {
-    return (
-        props.isLoading === true
-        ? <Loading text="Fetching Current Game Data"/>
-        :   props.errorMessage
-            ? <Error text={props.errorMessage} />
-            :
-            <div>
-                <h3><b>{props.title}</b></h3>
+const CurrentTable = (props) =>
 
-                <div className="row">
-                    <TableColumn
-                    side="Blue"
-                    player1={props.blob.participants[0]}
-                    player2={props.blob.participants[1]}
-                    player3={props.blob.participants[2]}
-                    player4={props.blob.participants[3]}
-                    player5={props.blob.participants[4]} />
+    props.isLoading === true
+    ? <Loading text="Fetching Current Game Data"/>
+    :   props.errorMessage
+        ? <Error text={props.errorMessage} />
+        :
+        <div>
+            <h3><b>{props.title}</b></h3>
 
-                    <TableColumn
-                    side="Red"
-                    player1={props.blob.participants[5]}
-                    player2={props.blob.participants[6]}
-                    player3={props.blob.participants[7]}
-                    player4={props.blob.participants[8]}
-                    player5={props.blob.participants[9]} />
-                </div>
+            <div className="row">
+                <TableColumn
+                side="Blue"
+                player1={props.blob.participants[0]}
+                player2={props.blob.participants[1]}
+                player3={props.blob.participants[2]}
+                player4={props.blob.participants[3]}
+                player5={props.blob.participants[4]} />
 
-                <CurrentAnalysisContainer isRanked={props.isRanked}/>
-
+                <TableColumn
+                side="Red"
+                player1={props.blob.participants[5]}
+                player2={props.blob.participants[6]}
+                player3={props.blob.participants[7]}
+                player4={props.blob.participants[8]}
+                player5={props.blob.participants[9]} />
             </div>
-    );
 
-}
+            <CurrentAnalysisContainer isRanked={props.isRanked}/>
+
+        </div>
+
+
+
 
 CurrentTable.propTypes = {
     isLoading    : PropTypes.bool.isRequired,

@@ -39,7 +39,7 @@ class Champion extends Component {
     }
     getChampion(id) {
         const url = `/api/getChampion/${id}`;
-        console.log(url);
+        //console.log(url);
         axios.get(url)
             .then((res) => {
                 this.setState({
