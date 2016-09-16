@@ -5,11 +5,12 @@
  * The advantage of handling remote API calls server side is to hide our API key
 */
 
-const axios = require('axios');
 
 const constants = require('./constants');
 const apiVersions = constants.apiVersions;
 const regionMap = constants.regions;
+const request = require('request');
+const async = require('async');
 
 const utf8 = require('utf8');
 
@@ -63,34 +64,61 @@ function getCleanInputs(regionRaw, nameRaw) {
 // Get summoner info from region and summoner name (na, vanila)
 // The output is a json string that is parsed later
 // This function assumes that region and name have been cleaned and validated
-function getSummonerID (region, name) {
+
+
+function getSummonerID (region, name, utf8name, callback) {
     const version = apiVersions.summonerByNameVersion;
 
     const url = `https://${region}.api.pvp.net/api/lol/${region}/v${version}/`+
-                `summoner/by-name/${name}?api_key=${API_KEY}`;
+                `summoner/by-name/${utf8name}?api_key=${API_KEY}`;
 
-    return axios.get(url);
+    request(url, (err, res, output) => {
+
+        if (res.statusCode !== 200) {
+
+            callback(res.statusCode)
+        } else {
+            let JSONoutput = JSON.parse(output);
+            console.log(JSONoutput)
+            let summonerID = JSONoutput[name].id;
+            console.log("found summ id")
+            callback(null, region, summonerID);
+        }
+
+    })
 }
+
+function getCurrentGame (region, summonerID, callback) {
+
+
+    console.log("got into getcurrengame")
+    console.log(region)
+    console.log(summonerID)
+    const url = `https://${region}.api.pvp.net/observer-mode/rest/consumer/` +
+    `getSpectatorGameInfo/${regionMap[region]}/${summonerID}?api_key=${API_KEY}`;
+
+    request(url, (err, res, output) => {
+        let JSONoutput = JSON.parse(output);
+        console.log(JSONoutput);
+        callback(null, JSONOutput);
+    })
+
+
+}
+
 
 // Get current game info from region and summoner ID (na, 40985835)
 // The output is a json string that is parsed later
 // THis function assumes that region has been cleaned
-function getCurrentGame(region, summonerID) {
 
-    const url = `https://${region}.api.pvp.net/observer-mode/rest/consumer/` +
-    `getSpectatorGameInfo/${regionMap[region]}/${summonerID}?api_key=${API_KEY}`;
+// function getCurrentGame(region, summonerID) {
+//
+//     const url = `https://${region}.api.pvp.net/observer-mode/rest/consumer/` +
+//     `getSpectatorGameInfo/${regionMap[region]}/${summonerID}?api_key=${API_KEY}`;
+//
+//     return axios.get(url);
+// }
 
-    return axios.get(url);
-}
-
-// ========================= GET CHALLENGER LIST ===============================
-function getChallengerList(region) {
-    const version = apiVersions.challengerListVersion;
-    const url = `https://${region}.api.pvp.net/api/lol/${region}/v${version}` +
-                `/league/challenger?type=RANKED_SOLO_5x5&api_key=${API_KEY}`;
-
-    return axios.get(url);
-}
 
 const helpers = {
 
@@ -100,77 +128,24 @@ const helpers = {
         const cleanedName = getCleanInputs(region, name)[1];
         const utf8Name = getCleanInputs(region, name)[2];
 
-        return getSummonerID(cleanedRegion, utf8Name)
+        async.waterfall([
 
-            .catch((err) => {
-                if (err.response) {
-                    throw new APIException(1.1, err.response.status, null);
-                } else {
-                    throw new APIException(1.2, null, err.message);
-                }
-            })
-
-            .then((res) => {
-                // If we are here, then we've successfully acquired a summonerID
-                var summonerID = res.data[cleanedName].id;
-
-                return getCurrentGame(cleanedRegion, summonerID)
-
-                    .catch((err) => {
-                        if (err.response) {
-                            throw new APIException(2.1, err.response.status, null);
-                        } else {
-                            throw new APIException(2.2, null, err.message);
-                        }
-                    })
-
-                    .then((res) => {
-                        // If we are here, res.data contains the current match info
-                        return res.data;
-                    })
-
-            })
-
-    },
+            async.apply(getSummonerID, cleanedRegion, cleanedName, utf8Name),
+            getCurrentGame
 
 
-    fetchPlayerAnalysis: function() {
-        return "ToDo";
-    },
+        ], (err, success) => {
+            if (!err) {
+                return console.log(success);
+            } else {
 
-    fetchChallengersInGame: function(region) {
+            }
 
-        return getChallengerList(region)
-            .then((res) => {
-                return res.data;
-            })
-            .catch((err) => {
-                if (err.response) {
-                    throw new APIException(4.1, err.response.status, null);
-                } else {
-                    throw new APIException(4.2, null, err.message);
-                }
-            })
 
-    },
+        })
 
-    fetchChampionById: function(id) {
-        const version = apiVersions.championStaticVersion;
-        const url = `https://global.api.pvp.net/api/lol/static-data/na/v${version}/champion/${id}?api_key=${API_KEY}`;
-
-        return axios.get(url)
-            .then((res) => {
-                return res.data.name;
-            })
-            .catch((err) => {
-                if (err.response) {
-                    throw new APIException(5.1, err.response.status, null);
-                } else {
-                    throw new APIException(5.2, null, err.message);
-                }
-            })
+        //getSummonerID(cleanedRegion, ut f8Name)
     }
-
 
 };
 
