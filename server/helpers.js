@@ -19,35 +19,9 @@ const utf8 = require('utf8');
 const API_KEY = process.env.API_KEY || require('../SECRET').DEV_LOCAL_KEY;
 
 
-// This exception is thrown on non-200 requests from Riot's API
-// Status is the status code returned (404)
-// Message is only if a non-header status is returned
-// Example below:
-// Note that if we have an error with a response status, we send that back
-// Otherwise, we sent the full error message
-// The code (1.1, 1.2) allows us to pinpoint where exactlly the error was thrown
-
-// return getSummonerID(cleanedRegion, cleanedName)
-// .catch(function(err){
-//     if (err.response) {
-//         throw new APIException(1.1, err.response.status, null);
-//     } else {
-//         throw new APIException(1.2, null, err.message);
-//     }
-
-function APIException(code, status, message) {
-    this.code = code;
-    this.status = status;
-    this.message = message;
-}
-
-
-
-
 // Clean names by removing weird characters / converting them to utf-8 format
 // Lowercase the region and remove spaces
 // Lowercase the username and convert to utf-8
-
 function getCleanInputs(regionRaw, nameRaw) {
 
     const regionCleaned = regionRaw.replace(/\s+/g, '').toLowerCase();
@@ -64,8 +38,6 @@ function getCleanInputs(regionRaw, nameRaw) {
 // Get summoner info from region and summoner name (na, vanila)
 // The output is a json string that is parsed later
 // This function assumes that region and name have been cleaned and validated
-
-
 function getSummonerID (region, name, utf8name, callback) {
     const version = apiVersions.summonerByNameVersion;
 
@@ -75,13 +47,12 @@ function getSummonerID (region, name, utf8name, callback) {
     request(url, (err, res, output) => {
 
         if (res.statusCode !== 200) {
-
-            callback(res.statusCode)
+            callback(['getSummonerID', res.statusCode]);
+        } else if (err) {
+            callback(['getSummonerID', err]);
         } else {
-            let JSONoutput = JSON.parse(output);
-            console.log(JSONoutput)
-            let summonerID = JSONoutput[name].id;
-            console.log("found summ id")
+            let json = JSON.parse(output);
+            let summonerID = json[name].id;
             callback(null, region, summonerID);
         }
 
@@ -89,40 +60,63 @@ function getSummonerID (region, name, utf8name, callback) {
 }
 
 function getCurrentGame (region, summonerID, callback) {
-
-
-    console.log("got into getcurrengame")
-    console.log(region)
-    console.log(summonerID)
+    //console.log(region + ' ' + summonerID);
     const url = `https://${region}.api.pvp.net/observer-mode/rest/consumer/` +
     `getSpectatorGameInfo/${regionMap[region]}/${summonerID}?api_key=${API_KEY}`;
 
     request(url, (err, res, output) => {
-        let JSONoutput = JSON.parse(output);
-        console.log(JSONoutput);
-        callback(null, JSONOutput);
+
+        if (res.statusCode !== 200) {
+            callback(['getCurrentGame', res.statusCode]);
+        } else if (err) {
+            callback(['getCurrentGame', err]);
+        } else {
+            let json = JSON.parse(output);
+
+            callback(null, json);
+        }
     })
 
 
 }
 
 
-// Get current game info from region and summoner ID (na, 40985835)
-// The output is a json string that is parsed later
-// THis function assumes that region has been cleaned
 
-// function getCurrentGame(region, summonerID) {
-//
-//     const url = `https://${region}.api.pvp.net/observer-mode/rest/consumer/` +
-//     `getSpectatorGameInfo/${regionMap[region]}/${summonerID}?api_key=${API_KEY}`;
-//
-//     return axios.get(url);
-// }
+function handleError (err, callback) {
+    let msg = 'hi';
+    let functionName = err[0];
+    let status = err[1];
+    switch(functionName) {
 
+        case 'getSummonerID':
+            if (status === 400) msg = 'Invalid request made. Oops! [1]';
+            else if (status === 401) msg = 'Out of date API key. Oops! [1]';
+            else if (status === 404) msg = 'This summoner does not exist.';
+            else if (status === 429) msg = 'Rate limit exceeded. Oops! [1]';
+            else if (status === 500) msg = 'Internal issues. Oops! [1]';
+            else if (status === 503) msg = 'Unable to communicate with Riot API servers.';
+            else msg = 'Unexpected error: ' + status + ' [1]';
+
+            break;
+
+        case 'getCurrentGame':
+            if (status === 403) msg = 'Forbidden request. Oops! [2]';
+            else if (status === 404) msg = 'This summoner is currently not in-game.';
+            else if (status === 429) msg = 'Rate limit exceeded. Oops! [2]';
+            else if (status === 500) msg = 'Internal issues. Oops! [2]';
+            else msg = 'Unexpected error: ' + status + ' [2]';
+
+            break;
+
+        default:
+            msg = 'Uncaught Error';
+    }
+    callback(msg);
+}
 
 const helpers = {
 
-    fetchCurrentGame: function(region, name) {
+    fetchCurrentGame: function(region, name, done) {
 
         const cleanedRegion = getCleanInputs(region, name)[0];
         const cleanedName = getCleanInputs(region, name)[1];
@@ -135,12 +129,15 @@ const helpers = {
 
 
         ], (err, success) => {
-            if (!err) {
-                return console.log(success);
+
+            if (err) {
+                console.log(err);
+                handleError(err, (msg) => {
+                    done(msg, null);
+                });
             } else {
-
+                done(null, success);
             }
-
 
         })
 
