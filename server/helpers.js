@@ -1,10 +1,5 @@
 'use strict';
 
-/* These helper functions manage calls to Riot's API.
- * These calls are returned via promise to our local api (api.js)
- * The advantage of handling remote API calls server side is to hide our API key
-*/
-
 const request = require('request');
 const async = require('async');
 const utf8 = require('utf8');
@@ -13,16 +8,14 @@ const constants = require('./constants');
 const apiVersions = constants.apiVersions;
 const regionMap = constants.regions;
 
-
-
-// The real key has been uploaded as a Heroku config and is not availble.
+// The real key has been uploaded as a Heroku config and is not available.
 // For local development, the key is stored in gitignore'd file SECRET.js
 const API_KEY = process.env.API_KEY || require('../SECRET').DEV_LOCAL_KEY;
 
 
 // Clean names by removing weird characters / converting them to utf-8 format
 // Lowercase the region and remove spaces
-// Lowercase the username and convert to utf-8
+// Store cleaned name for getSummonerID json parse
 function getCleanInputs(regionRaw, nameRaw) {
 
     const regionCleaned = regionRaw.replace(/\s+/g, '').toLowerCase();
@@ -36,8 +29,7 @@ function getCleanInputs(regionRaw, nameRaw) {
     return [regionCleaned, nameCleaned, nameUTF8];
 }
 
-// Get summoner info from region and summoner name (na, vanila)
-// The output is a json string that is parsed later
+// Get summoner id from region and summoner name (na, vanila)
 // This function assumes that region and name have been cleaned and validated
 function getSummonerID (region, name, utf8name, callback) {
     const version = apiVersions.summonerByNameVersion;
@@ -47,12 +39,12 @@ function getSummonerID (region, name, utf8name, callback) {
 
     request(url, (err, res, output) => {
 
-        if (!res.statusCode) {
+        if (err) {
+            callback(['getSummonerID', err]);
+        } else if (!res.statusCode) {
             callback(['getSummonerID', 'Unknown']);
         } else if (res.statusCode !== 200) {
             callback(['getSummonerID', res.statusCode]);
-        } else if (err) {
-            callback(['getSummonerID', err]);
         } else {
             let json = JSON.parse(output);
             let summonerID = json[name].id;
@@ -62,22 +54,22 @@ function getSummonerID (region, name, utf8name, callback) {
     })
 }
 
+// hit riot's current game endpoint. this returns a lot of json...
+// ...such as participants' summoner ID's that we will use in later api requests
 function getCurrentGame (region, summonerID, callback) {
-    //console.log(region + ' ' + summonerID);
     const url = `https://${region}.api.pvp.net/observer-mode/rest/consumer/` +
     `getSpectatorGameInfo/${regionMap[region]}/${summonerID}?api_key=${API_KEY}`;
 
     request(url, (err, res, output) => {
 
-        if (!res.statusCode) {
+        if (err) {
+            callback(['getCurrentGame', err]);
+        } else if (!res.statusCode) {
             callback(['getCurrentGame', 'Unknown']);
         } else if (res.statusCode !== 200) {
             callback(['getCurrentGame', res.statusCode]);
-        } else if (err) {
-            callback(['getCurrentGame', err]);
         } else {
             let json = JSON.parse(output);
-
             callback(null, json);
         }
     })
@@ -88,7 +80,7 @@ function getCurrentGame (region, summonerID, callback) {
 
 
 function handleError (err, callback) {
-    let msg = 'hi';
+    let msg;
     let functionName = err[0];
     let status = err[1];
     switch(functionName) {
@@ -146,10 +138,9 @@ const helpers = {
                 done(null, success);
             }
 
-        })
+        }) // end async waterfall
 
-        //getSummonerID(cleanedRegion, ut f8Name)
-    }
+    } //end fetchCurrentGame
 
 };
 
