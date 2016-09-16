@@ -5,14 +5,15 @@
  * The advantage of handling remote API calls server side is to hide our API key
 */
 
+const request = require('request');
+const async = require('async');
+const utf8 = require('utf8');
 
 const constants = require('./constants');
 const apiVersions = constants.apiVersions;
 const regionMap = constants.regions;
-const request = require('request');
-const async = require('async');
 
-const utf8 = require('utf8');
+
 
 // The real key has been uploaded as a Heroku config and is not availble.
 // For local development, the key is stored in gitignore'd file SECRET.js
@@ -46,7 +47,9 @@ function getSummonerID (region, name, utf8name, callback) {
 
     request(url, (err, res, output) => {
 
-        if (res.statusCode !== 200) {
+        if (!res.statusCode) {
+            callback(['getSummonerID', 'Unknown']);
+        } else if (res.statusCode !== 200) {
             callback(['getSummonerID', res.statusCode]);
         } else if (err) {
             callback(['getSummonerID', err]);
@@ -66,7 +69,9 @@ function getCurrentGame (region, summonerID, callback) {
 
     request(url, (err, res, output) => {
 
-        if (res.statusCode !== 200) {
+        if (!res.statusCode) {
+            callback(['getCurrentGame', 'Unknown']);
+        } else if (res.statusCode !== 200) {
             callback(['getCurrentGame', res.statusCode]);
         } else if (err) {
             callback(['getCurrentGame', err]);
@@ -121,6 +126,8 @@ const helpers = {
         const cleanedRegion = getCleanInputs(region, name)[0];
         const cleanedName = getCleanInputs(region, name)[1];
         const utf8Name = getCleanInputs(region, name)[2];
+
+        if (!regionMap[cleanedRegion] ) return done('Invalid Region.', null);
 
         async.waterfall([
 
