@@ -15,7 +15,7 @@ const constants = {
 
     apiVersions: {
         summonerByNameVersion : 1.4,
-        challengerListVersion : 2.5,
+        leagueVersion : 2.5,
         championStaticVersion : 1.2
     },
 

@@ -13,21 +13,6 @@ const regionMap = constants.regions;
 const API_KEY = process.env.API_KEY || require('../SECRET').DEV_LOCAL_KEY;
 
 
-// Clean names by removing weird characters / converting them to utf-8 format
-// Lowercase the region and remove spaces
-// Store cleaned name for getSummonerID json parse
-function getCleanInputs(regionRaw, nameRaw) {
-
-    const regionCleaned = regionRaw.replace(/\s+/g, '').toLowerCase();
-    let nameCleaned = nameRaw.replace(/\s+/g, '').toLowerCase();
-
-    // Ignore invalid characters
-    nameCleaned = nameCleaned.replace(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/gi, '');
-
-    const nameUTF8 = utf8.encode(nameCleaned);
-
-    return [regionCleaned, nameCleaned, nameUTF8];
-}
 
 // Get summoner id from region and summoner name (na, vanila)
 // This function assumes that region and name have been cleaned and validated
@@ -113,11 +98,20 @@ function handleError (err, callback) {
 
 const helpers = {
 
-    fetchCurrentGame: function(region, name, done) {
+    getCleanInputs: function(regionRaw, nameRaw) {
 
-        const cleanedRegion = getCleanInputs(region, name)[0];
-        const cleanedName = getCleanInputs(region, name)[1];
-        const utf8Name = getCleanInputs(region, name)[2];
+        const regionCleaned = regionRaw.replace(/\s+/g, '').toLowerCase();
+        let nameCleaned = nameRaw.replace(/\s+/g, '').toLowerCase();
+
+        // Ignore invalid characters
+        nameCleaned = nameCleaned.replace(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/gi, '');
+
+        const nameUTF8 = utf8.encode(nameCleaned);
+
+        return [regionCleaned, nameCleaned, nameUTF8];
+    },
+
+    fetchCurrentGame: function(cleanedRegion, cleanedName, utf8Name, done) {
 
         if (!regionMap[cleanedRegion] ) return done('Invalid Region.', null);
 
@@ -140,7 +134,77 @@ const helpers = {
 
         }) // end async waterfall
 
-    } //end fetchCurrentGame
+    }, //end fetchCurrentGame
+
+    fetchParticipants: function(blob, region, done) {
+
+        const version = apiVersions.leagueVersion;
+
+        // create array of participants' summoner ID's
+        let summonerIDList = '';
+        for (let i in blob.participants) {
+            summonerIDList += `${blob.participants[i].summonerId},`;
+        }
+        summonerIDList = summonerIDList.slice(0,-1);
+
+        const url = `https://${region}.api.pvp.net/api/lol/${region}/` +
+        `v${version}/league/by-summoner/${summonerIDList}/entry?api_key=${API_KEY}`;
+
+        request(url, (err, res, output) => {
+
+            if (err) {
+                done(['fetchParticipants', err]);
+            } else if (!res.statusCode) {
+                done(['fetchParticipants', 'Unknown']);
+            } else if (res.statusCode !== 200) {
+                done(['fetchParticipants', res.statusCode]);
+            } else {
+                let json = JSON.parse(output);
+
+                for (let i = 0; i < blob.participants.length; i++) {
+                    let idToFind = blob.participants[i].summonerId.toString();
+
+                    if (Object.keys(json).indexOf(idToFind) !== -1 && json[idToFind][0].queue === 'RANKED_SOLO_5x5') {
+                        let tier = json[idToFind][0].tier;
+                        let division = json[idToFind][0].entries[0].division;
+                        let lp = json[idToFind][0].entries[0].leaguePoints;
+                        let wins = json[idToFind][0].entries[0].wins;
+                        let losses = json[idToFind][0].entries[0].losses;
+
+                        let rank = `${tier} ${division} ${lp}LP`;
+                        let wl = `${wins} / ${losses}`;
+
+                        let series = json[idToFind][0].entries[0].miniSeries;
+                        if (series) {
+                            blob.participants[i].rank = {
+                                rank: rank,
+                                wl: wl,
+                                series: {
+                                    target: series.target,
+                                    wins: series.wins,
+                                    losses: series.losses,
+                                    progress: series.progress
+                                }
+                            };
+                        } else {
+                            blob.participants[i].rank = {
+                                rank: rank,
+                                wl: wl
+                            };
+                        }
+
+
+                    } else {
+                        blob.participants[i].rank = { rank: 'Unranked' };
+                    }
+                } //end for loop
+
+                done(null,blob)
+
+            }
+        })
+
+    }
 
 };
 

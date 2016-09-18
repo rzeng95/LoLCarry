@@ -17,14 +17,16 @@ module.exports = function(app) {
         const regionRaw = req.params.region;
         const nameRaw = req.params.summonerName;
 
+        const cleanedInputs = helpers.getCleanInputs(regionRaw, nameRaw);
+        const cleanedRegion = cleanedInputs[0];
+        const cleanedName = cleanedInputs[1];
+        const utf8Name = cleanedInputs[2];
 
         async.waterfall([
             function fetchCurrentGameWrapper(cb) {
                 limiter.removeTokens(2, (err, remainingRequests) => {
-                    // console.log('fetchCurrentGameWrapper');
-                    // console.log(err);
-                    // console.log(remainingRequests);
-                    helpers.fetchCurrentGame(regionRaw, nameRaw, (err, json) => {
+
+                    helpers.fetchCurrentGame(cleanedRegion, cleanedName, utf8Name, (err, json) => {
                         if (err) {
                             cb(err, null);
                         } else {
@@ -37,14 +39,17 @@ module.exports = function(app) {
             },
             function fetchParticipantsWrapper(blob, cb) {
 
-                limiter.removeTokens(10, (err, remainingRequests) => {
-                    // console.log('fetchParticipantsWrapper');
-                    // console.log(err);
-                    // console.log(remainingRequests);
-                    // helpers.fetchParticipants(blob, (err, json) => {
-                    //
-                    // })
-                    cb(null, blob);
+                limiter.removeTokens(1, (err, remainingRequests) => {
+
+                    helpers.fetchParticipants(blob, cleanedRegion, (err, json) => {
+                        if (err) {
+                            cb(err, null);
+                        } else {
+                            cb(null, json);
+                        }
+
+                    })
+
                 });
 
             }
@@ -58,33 +63,6 @@ module.exports = function(app) {
             }
         });
 
-        /*
-        limiter.removeTokens(2, (err, remainingRequests) => {
-            if (err) {
-                res.status(500).send('Internal Server Error');
-            } else {
-                helpers.fetchCurrentGame(regionRaw, nameRaw, (error, json) => {
-                    // Status 299 is our custom http code that we will use to represent failure
-                    // (e.g. valid summoner not in game), instead of a direct 404
-                    if (error !== null) {
-                        res.status(299).send(error);
-                    } else {
-
-                        limiter.removeTokens(3, (err, remainingRequests) => {
-
-                            helpers.fetchGameParticipants(json, (error, players) => {
-
-                            })
-                            //placeholder
-                            res.status(200).send(json);
-                        })
-                    }
-
-                })
-            }
-
-        });
-        */
 
     });
 
