@@ -35,7 +35,7 @@ module.exports = function(app) {
 
                     }); // end helpers.fetchCurrentGame
 
-                }); //end limiter
+                }); // end limiter
             },
             function fetchParticipantsWrapper(blob, cb) {
 
@@ -48,10 +48,22 @@ module.exports = function(app) {
                             cb(null, json);
                         }
 
-                    })
+                    }) // end helpers.fetchParticipants
 
-                });
+                }); // end limiter
 
+            },
+            function fetchPicturesWrapper(blob, cb) {
+                // these are all fetching static data
+                // (does not count against rate limit)
+                helpers.fetchPictures(blob, (err, json) => {
+                    if (err) {
+                        cb(err, null);
+                    } else {
+                        cb(null, json);
+                    }
+
+                })
             }
 
         ], (err, success) => {

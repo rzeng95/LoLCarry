@@ -62,6 +62,71 @@ function getCurrentGame (region, summonerID, callback) {
 
 }
 
+function getStaticVersion (blob, callback) {
+    const version = apiVersions.staticVersion;
+    const url =  `https://global.api.pvp.net/api/lol/static-data/na/v` +
+                 `${version}/versions?api_key=${API_KEY}`
+
+    request(url, (err, res, output) => {
+        if (!err && res.statusCode === 200) {
+            let json = JSON.parse(output);
+            callback(null, blob, json[0]);
+        } else {
+            callback(['getStaticVersion', null])
+        }
+    });
+}
+
+function getChampionNames (blob, picVersion, callback) {
+
+    const version = apiVersions.staticVersion;
+    let champIDArray = [];
+    let url;
+    let urlPic;
+
+    for (let i in blob.participants) {
+        champIDArray.push(blob.participants[i].championId);
+    }
+
+    async.map(champIDArray, (champID, cb) => {
+
+        url = `https://global.api.pvp.net/api/lol/static-data/na/v${version}/` +
+              `champion/${champID}?champData=image&api_key=${API_KEY}`;
+
+        request(url, (err, res, output) => {
+            if (!err && res.statusCode === 200) {
+                let json = JSON.parse(output);
+                cb(null, [json.name, json.image.full]);
+            } else {
+                cb(['getChampName', null])
+            }
+
+        });
+
+    }, (err, champNameArray) => {
+        if (err) {
+            handleError(err, (msg) => {
+                callback(msg, null);
+            });
+        } else {
+            for (let i in blob.participants) {
+                urlPic = `http://ddragon.leagueoflegends.com/cdn/` +    `${picVersion}/img/champion/${champNameArray[i][1]}`;
+
+                blob.participants[i]['championName'] = champNameArray[i][0];
+                blob.participants[i]['championURL'] = urlPic;
+            }
+            callback(null, blob, picVersion);
+        }
+
+    });
+
+}
+
+function getStaticURLs (blob, picVersion, callback) {
+    // convert
+
+    callback(null, blob);
+}
 
 
 function handleError (err, callback) {
@@ -87,6 +152,12 @@ function handleError (err, callback) {
             else if (status === 429) msg = 'Rate limit exceeded. Oops! [2]';
             else if (status === 500) msg = 'Internal issues. Oops! [2]';
             else msg = 'Unexpected error: ' + status + ' [2]';
+
+            break;
+
+        case 'getStaticVersion':
+        case 'fetchChampName':
+            msg = 'Fetch Error'; // Change this
 
             break;
 
@@ -199,10 +270,41 @@ const helpers = {
                     }
                 } //end for loop
 
-                done(null,blob)
+                done(null,blob);
 
             }
         })
+
+    }, // end fetchParticipants
+
+
+
+    fetchPictures: function(blob, done) {
+
+        // convert champion id to champion name and champion portrait urls
+        // convert rune id to rune portrait urls
+        // convert masteries id to masteries portrait (or just show keystone)
+        // convert summoner spells id to portrait urls
+
+        async.waterfall([
+            async.apply(getStaticVersion, blob),
+            getChampionNames,
+            getStaticURLs
+
+
+        ], (err, success) => {
+
+            if (err) {
+                handleError(err, (msg) => {
+                    done(err, null);
+                });
+            } else {
+                //done(null, success);
+                done(null, blob);
+            }
+
+        });
+
 
     }
 
