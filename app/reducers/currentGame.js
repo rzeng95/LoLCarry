@@ -1,6 +1,8 @@
 const initialState = {
     isLoading: true,
-    data: [],
+    data: {
+        gameTitle: 'Unknown Game Mode'
+    },
     errorMessage: null
 }
 
@@ -22,7 +24,7 @@ export default function currentGame (state=initialState, action) {
         case 'CAUGHT_ERROR':
             return Object.assign({}, state, {
                 isLoading: false,
-                data: null,
+                data: initialState.data,
                 errorMessage: action.errorMessage
             })
         default:

@@ -10,19 +10,12 @@ import CurrentTable from '../components/currentGameComponents/CurrentTable';
 class ResultContainer extends Component {
     constructor(props) {
         super(props);
-
     }
     componentDidMount() {
-        const player = this.props.params.player;
-        const region = this.props.params.region;
-
-        console.log('resultContainer inputs: ' + region + ' ' + name);
-
-        this.props.searchForCurrentGame(region, player);
-
+        this.props.searchForCurrentGame(this.props.params.region, this.props.params.player);
     }
     componentWillReceiveProps(nextProps) {
-        this.props.searchForCurrentGame(nextProps.params.region, nextProps.params.player)
+        this.props.searchForCurrentGame(nextProps.params.region, nextProps.params.player);
     }
 
     render() {

@@ -5,6 +5,7 @@ import Loading from '../Loading';
 import Error from '../Error';
 
 const CurrentTable = (props) =>
+
     props.isLoading === true
     ? <Loading text="Fetching Current Game Data"/>
     :
@@ -12,7 +13,7 @@ const CurrentTable = (props) =>
         ? <Error text={props.errorMessage} />
         :
         <div>
-            <h3><b>{props.title.participants[0].summonerName}</b></h3>
+            <h3><b>{props.title}</b></h3>
 
         </div>
 
@@ -20,7 +21,7 @@ const CurrentTable = (props) =>
 const mapStateToProps = (state) => ({
     isLoading : state.currentGame.isLoading,
     errorMessage : state.currentGame.errorMessage,
-    title : state.currentGame.data
+    title : state.currentGame.data.gameTitle
 })
 
 

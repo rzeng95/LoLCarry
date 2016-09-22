@@ -7,6 +7,8 @@ const utf8 = require('utf8');
 const constants = require('./constants');
 const apiVersions = constants.apiVersions;
 const regionMap = constants.regions;
+const gameModes = constants.gameModes;
+const rankedModes = constants.rankedModes;
 
 // The real key has been uploaded as a Heroku config and is not available.
 // For local development, the key is stored in gitignore'd file SECRET.js
@@ -110,7 +112,8 @@ function getChampionNames (blob, picVersion, callback) {
             });
         } else {
             for (let i in blob.participants) {
-                urlPic = `http://ddragon.leagueoflegends.com/cdn/` +    `${picVersion}/img/champion/${champNameArray[i][1]}`;
+                urlPic = `http://ddragon.leagueoflegends.com/cdn/` +
+                `${picVersion}/img/champion/${champNameArray[i][1]}`;
 
                 blob.participants[i]['championName'] = champNameArray[i][0];
                 blob.participants[i]['championURL'] = urlPic;
@@ -123,7 +126,7 @@ function getChampionNames (blob, picVersion, callback) {
 }
 
 function getStaticURLs (blob, picVersion, callback) {
-    // convert
+    // this is where we get summoner spells url's ToDo
 
     callback(null, blob);
 }
@@ -304,10 +307,28 @@ const helpers = {
             }
 
         });
+    }, // end fetchPictures
 
+    fetchMapInfo: function(blob, done) {
 
+        let gameTitle = 'Custom Game';
+        let gameID = blob.gameQueueConfigId;
+        let isRanked;
+
+        if (gameID) {
+            if (gameModes[gameID]) {
+                gameTitle = gameModes[gameID];
+            } else {
+                gameTitle = blob.gameType;
+            }
+        }
+
+        rankedModes.indexOf(gameID) !== -1 ? isRanked = true : isRanked = false;
+        blob['gameTitle'] = gameTitle;
+        blob['isRanked'] = isRanked;
+
+        done(null, blob);
     }
-
 };
 
 module.exports = helpers;

@@ -11,14 +11,10 @@ export const enableLoadingAction = () => {
 
 // add "request data" action
 
-// assumes...inputs have been validated
 export const searchForCurrentGameAction = (region, name) => dispatch => {
-    console.log('inside search action')
-    console.log(region + ' ' + name)
-    console.log('end search action')
 
     dispatch(enableLoadingAction());
-    
+
     axios.get(`/api/getCurrentGame/${region}/${name}`)
         .then( res => {
             if (res.status === 200) {

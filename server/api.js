@@ -64,6 +64,11 @@ module.exports = function(app) {
                     }
 
                 })
+            },
+            function fetchMapInfoWrapper(blob, cb) {
+                helpers.fetchMapInfo(blob, (err, json) => {
+                    cb(null, json);
+                })
             }
 
         ], (err, success) => {

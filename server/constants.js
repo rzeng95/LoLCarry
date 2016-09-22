@@ -22,7 +22,7 @@ const constants = {
     gameModes: {
         0   : 'Custom Game',
         2   : 'Normal 5v5',
-        4   : 'Ranked 5v5',
+        4   : 'Ranked Solo 5v5',
         8   : 'Normal 3v3',
         14  : 'Normal 5v5',
         16  : 'Dominion',
@@ -31,8 +31,8 @@ const constants = {
         31  : '5v5 Co-op vs AI',
         32  : '5v5 Co-op vs AI',
         33  : '5v5 Co-op vs AI',
-        41  : 'Ranked 3v3',
-        42  : 'Ranked 5v5',
+        41  : 'Ranked Team 3v3',
+        42  : 'Ranked Team 5v5',
         52  : '3v3 Co-op vs AI',
         61  : 'Normal 5v5',
         65  : 'ARAM',
@@ -55,10 +55,10 @@ const constants = {
         315 : 'Nexus Siege',
         317 : 'Definitely Not Dominion',
         400 : 'Normal 5v5',
-        410 : 'Ranked 5v5'
+        410 : 'Ranked Solo 5v5'
     },
 
-    rankedModes: [4, 42, 410]
+    rankedModes: [4, 41, 42, 410]
 
 }
 
