@@ -7,7 +7,7 @@ import * as currentGameActions from '../actions/currentGameActions';
 
 import CurrentTable from '../components/currentGameComponents/CurrentTable';
 
-class ResultContainer extends Component {
+class CurrentTableContainer extends Component {
     constructor(props) {
         super(props);
     }
@@ -31,4 +31,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ResultContainer);
+export default connect(null, mapDispatchToProps)(CurrentTableContainer);
