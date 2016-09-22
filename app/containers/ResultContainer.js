@@ -1,47 +1,41 @@
 import React, { Component, PropTypes } from 'react';
-
-import Result from '../components/Result';
+import { connect } from 'react-redux';
 
 import { regions } from '../../server/constants';
+
+import * as currentGameActions from '../actions/currentGameActions';
+
+import CurrentTable from '../components/currentGameComponents/CurrentTable';
 
 class ResultContainer extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            incorrectRegion: false
-        };
     }
-    componentWillMount() {
-        // don't care about if player name is invalid; our backend takes care of that
-        // however, an incorrect region name won't get us a return from Riot's API
-        // if region is invalid, return error message that propagates down
-        if (!regions[this.props.params.region]) {
-            this.setState({
-                incorrectRegion: true
-            });
-        } else {
-            this.setState({
-                region: this.props.params.region
-            });
-        }
+    componentDidMount() {
+        const player = this.props.params.player;
+        const region = this.props.params.region;
+
+        console.log('resultContainer inputs: ' + region + ' ' + name);
+
+        this.props.searchForCurrentGame(region, player);
+
+    }
+    componentWillReceiveProps(nextProps) {
+        this.props.searchForCurrentGame(nextProps.params.region, nextProps.params.player)
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            incorrectRegion: false,
-            region: nextProps.params.region,
-            player: nextProps.params.player
-        });
-    }
     render() {
         return (
-            <Result
-            incorrectRegion={this.state.incorrectRegion}
-            player={this.props.params.player}
-            region={this.state.region} />
+            <CurrentTable />
         );
     }
 }
 
-export default ResultContainer;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        searchForCurrentGame: (region, name) => dispatch( currentGameActions.searchForCurrentGameAction(region, name) )
+    }
+}
+
+export default connect(null, mapDispatchToProps)(ResultContainer);
