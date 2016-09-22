@@ -1,7 +1,8 @@
 const initialState = {
     isLoading: true,
     data: {
-        gameTitle: 'Unknown Game Mode'
+        gameTitle: 'Unknown Game Mode',
+        participants: []
     },
     errorMessage: null
 }
@@ -12,7 +13,7 @@ export default function currentGame (state=initialState, action) {
         case 'ENABLE_LOADING':
             return Object.assign({}, state, {
                 isLoading: true,
-                data: [],
+                data: initialState.data,
                 errorMessage: null
             })
         case 'VALIDATED_SEARCH':

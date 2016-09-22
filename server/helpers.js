@@ -219,18 +219,25 @@ const helpers = {
         for (let i in blob.participants) {
             summonerIDList += `${blob.participants[i].summonerId},`;
         }
+        //console.log(summonerIDList);
         summonerIDList = summonerIDList.slice(0,-1);
 
         const url = `https://${region}.api.pvp.net/api/lol/${region}/` +
         `v${version}/league/by-summoner/${summonerIDList}/entry?api_key=${API_KEY}`;
-
+        //console.log(url);
         request(url, (err, res, output) => {
 
             if (err) {
                 done(['fetchParticipants', err]);
             } else if (!res.statusCode) {
                 done(['fetchParticipants', 'Unknown']);
-            } else if (res.statusCode !== 200) {
+            } else if (res.statusCode === 404) {
+                console.log('special case: all participants are unranked');
+                for (let i = 0; i < blob.participants.length; i++) {
+                    blob.participants[i].rank = { rank: 'Unranked' };
+                }
+                done(null, blob);
+            } else if (res.statusCode !== 200 && res.statusCode !== 404) {
                 done(['fetchParticipants', res.statusCode]);
             } else {
                 let json = JSON.parse(output);
@@ -240,12 +247,16 @@ const helpers = {
 
                     if (Object.keys(json).indexOf(idToFind) !== -1 && json[idToFind][0].queue === 'RANKED_SOLO_5x5') {
                         let tier = json[idToFind][0].tier;
+                        tier = tier.toLowerCase();
+                        tier = tier.charAt(0).toUpperCase() + tier.slice(1);
                         let division = json[idToFind][0].entries[0].division;
+
+                        //division = division.charAt(0).toUpperCase();
                         let lp = json[idToFind][0].entries[0].leaguePoints;
                         let wins = json[idToFind][0].entries[0].wins;
                         let losses = json[idToFind][0].entries[0].losses;
 
-                        let rank = `${tier} ${division} ${lp}LP`;
+                        let rank = `${tier} ${division} (${lp} LP)`;
                         let wl = `${wins} / ${losses}`;
 
                         let series = json[idToFind][0].entries[0].miniSeries;
@@ -327,6 +338,24 @@ const helpers = {
         blob['gameTitle'] = gameTitle;
         blob['isRanked'] = isRanked;
 
+        blob['playersPerSide'] = blob.participants.length / 2;
+
+        done(null, blob);
+    }, //end fetchMapInfo
+
+    splitTeams: function(blob, done) {
+        let blueSideParticipants = [];
+        let redSideParticipants = [];
+        for (let player in blob.participants) {
+            if (blob.participants[player].teamId === 100) {
+                blueSideParticipants.push(blob.participants[player]);
+            } else {
+                redSideParticipants.push(blob.participants[player]);
+            }
+
+        }
+        blob['blueSideParticipants'] = blueSideParticipants;
+        blob['redSideParticipants'] = redSideParticipants;
         done(null, blob);
     }
 };

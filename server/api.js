@@ -69,6 +69,11 @@ module.exports = function(app) {
                 helpers.fetchMapInfo(blob, (err, json) => {
                     cb(null, json);
                 })
+            },
+            function splitTeamsWrapper(blob, cb) {
+                helpers.splitTeams(blob, (err, json) => {
+                    cb(null, json);
+                })
             }
 
         ], (err, success) => {
