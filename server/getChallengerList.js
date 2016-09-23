@@ -17,6 +17,8 @@ function isInGame(summonerID, region, callback) {
     request(url, (err, res, output) =>{
         if (!err && res.statusCode === 200) {
             callback(null, 'IN_GAME');
+        } else if (err) {
+            callback(err, null);
         } else if (res.statusCode === 404){
             callback(null, 'NOT_IN_GAME');
         } else {
@@ -51,10 +53,10 @@ module.exports = function(region, done) {
                 request(url, (err, res, output) =>{
                     if (!err && res.statusCode === 200) {
                         cb(null, 'IN_GAME');
-                    } else if (res.statusCode === 404){
-                        cb(null, 'NOT_IN_GAME');
                     } else if (err) {
                         cb(err, null);
+                    } else if (res.statusCode === 404){
+                        cb(null, 'NOT_IN_GAME');
                     } else {
                         cb(`Unexpected Error: ${res.statusCode}`, null);
                     }

@@ -103,7 +103,7 @@ module.exports = function(app) {
     app.get('/api/getChallengerlist/:region', (req, res) => {
         const region = req.params.region;
 
-        limiter.removeTokens(201, (err, remainingRequests) => {
+        limiter.removeTokens(2, (err, remainingRequests) => {
 
             getChallengerList(region, (err, output) => {
                 err

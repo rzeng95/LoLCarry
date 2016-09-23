@@ -7,8 +7,15 @@ export const enableLoadingAction = () => {
     }
 }
 
-export const requestChallengerListAction = (region) => dispatch => {
+export const changeRegionAction = (newRegion) => {
+    return {
+        type: 'CHANGE_REGION_CHALLENGER',
+        region: newRegion
+    }
+}
 
+export const requestChallengerListAction = (region) => dispatch => {
+    dispatch(changeRegionAction(region));
     dispatch(enableLoadingAction());
 
     region = region.toLowerCase();

@@ -7,13 +7,11 @@ import ChallengerPlayer from './ChallengerPlayer';
 
 const ChallengerList = (props) =>
     props.isLoading === true
-    ? <div><br/><Loading text="Fetching Challenger List"/><br/></div>
+    ? <Loading />
     : props.errorMessage
         ? <div><br/><Error text={props.errorMessage} /><br/></div>
         : <div id="scroll-list">
-            <br />
-            <h3><b>List of Challenger NA Solo Queue Players</b></h3>
-            <br />
+
             <table className="table table-bordered text-center">
                 <thead>
                     <tr>

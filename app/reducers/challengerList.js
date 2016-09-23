@@ -27,6 +27,10 @@ export default function challengerList (state=initialState, action) {
                 data: initialState.data,
                 errorMessage: action.errorMessage
             })
+        case 'CHANGE_REGION_CHALLENGER':
+            return Object.assign({}, state, {
+                region: action.region
+            })
         default:
             return state;
     }

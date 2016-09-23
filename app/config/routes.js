@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Route, IndexRoute, Redirect, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
+import { syncHistoryWithStore } from 'react-router-redux'
 
 import Main from '../components/Main';
 import ChallengerListContainer from '../containers/ChallengerListContainer';
@@ -11,10 +12,12 @@ import Changelog from '../components/Changelog';
 
 import configureStore from '../stores/configureStore';
 const store = configureStore();
+const history = syncHistoryWithStore(browserHistory, store);
+
 
 var routes = (
     <Provider store={store}>
-        <Router history={browserHistory}>
+        <Router history={history}>
             <Route path="/" component={Main}>
                 <IndexRoute component={ChallengerListContainer} />
                 <Route path="/:region/:player" component={CurrentTableContainer} />

@@ -9,12 +9,5 @@ const Loading = (props) =>
         <br />
     </div>
 
-Loading.defaultProps = {
-    text : 'Loading'
-};
-
-Loading.propTypes = {
-    text : PropTypes.string.isRequired
-}
 
 export default Loading;
