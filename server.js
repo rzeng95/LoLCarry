@@ -8,7 +8,7 @@ const fallback = require('express-history-api-fallback');
 
 app.use(express.static('public'));
 
-if (ENV !== 'test') {
+if (ENV !== 'test' && ENV !== 'production') {
     const morgan = require('morgan');
     app.use(morgan('dev'));
 }
