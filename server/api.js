@@ -41,11 +41,11 @@ module.exports = function(app) {
 
                 limiter.removeTokens(1, (err, remainingRequests) => {
 
-                    helpers.fetchParticipants(blob, cleanedRegion, (err, json) => {
+                    helpers.fetchParticipants(blob, cleanedRegion, (err, json, list, region) => {
                         if (err) {
                             cb(err, null);
                         } else {
-                            cb(null, json);
+                            cb(null, json, list, region);
                         }
 
                     }) // end helpers.fetchParticipants
@@ -53,6 +53,14 @@ module.exports = function(app) {
                 }); // end limiter
 
             },
+
+            function fetchSummonerLevelWrapper(blob, summonerIDList, region, cb) {
+
+                helpers.fetchSummonerLevel(blob, summonerIDList, region, (err, json) => {
+                    err ? cb(err, null) : cb(null, json);
+                })
+            },
+
             function fetchPicturesWrapper(blob, cb) {
                 // these are all fetching static data
                 // (does not count against rate limit)

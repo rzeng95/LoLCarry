@@ -284,14 +284,40 @@ const helpers = {
                     }
                 } //end for loop
 
-                done(null,blob);
+                done(null,blob, summonerIDList, region);
 
             }
         })
 
     }, // end fetchParticipants
 
+    fetchSummonerLevel: function(blob, summonerIDList, region, done) {
+        const version = apiVersions.summonerByNameVersion;
+        const url = `https://${region}.api.pvp.net/api/lol/${region}/` +
+                `v${version}/summoner/${summonerIDList}?api_key=${API_KEY}`;
 
+        request(url, (err, res, output) => {
+            if (!err && res.statusCode === 200) {
+                let json = JSON.parse(output);
+
+                //console.log(json);
+                for (let i = 0; i < blob.participants.length; i++) {
+                    let idToFind = blob.participants[i].summonerId.toString();
+
+                    if (Object.keys(json).indexOf(idToFind) !== -1 && json[idToFind].summonerLevel !== 30) {
+                        blob.participants[i].rank = {
+                            rank: `Unranked (Level ${json[idToFind].summonerLevel})`
+                        }
+                    }
+                }
+                done(null, blob);
+
+            } else {
+                done(['fetchSummonerLevel', null])
+            }
+        })
+
+    }, // end fetchSummonerLevel
 
     fetchPictures: function(blob, done) {
 
