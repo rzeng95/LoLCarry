@@ -3,22 +3,20 @@ import axios from 'axios';
 
 export const enableLoadingAction = () => {
     return {
-        type: 'ENABLE_LOADING_CURRENTGAME'
+        type: 'ENABLE_LOADING_CHALLENGER'
     }
 }
 
-// add "isValidInput" action
-
-// add "request data" action
-
-export const searchForCurrentGameAction = (region, name) => dispatch => {
+export const requestChallengerListAction = (region) => dispatch => {
 
     dispatch(enableLoadingAction());
 
-    axios.get(`/api/getCurrentGame/${region}/${name}`)
+    region = region.toLowerCase();
+
+    axios.get(`/api/getChallengerList/${region}`)
         .then( res => {
             if (res.status === 200) {
-                dispatch(receivedFullData(res.data))
+                dispatch(receivedFullData(res.data, region))
             } else if (res.status === 299){
                 dispatch(receivedCaughtError(res.data))
             }
@@ -27,15 +25,16 @@ export const searchForCurrentGameAction = (region, name) => dispatch => {
         //.catch error
 }
 
-export const receivedFullData = (data) => {
+export const receivedFullData = (data, region) => {
     return {
-        type: 'VALIDATED_SEARCH_CURRENTGAME',
-        data: data
+        type: 'VALIDATED_SEARCH_CHALLENGER',
+        data: data,
+        region: region
     }
 }
 export const receivedCaughtError = (msg) => {
     return {
-        type: 'CAUGHT_ERROR_CURRENTGAME',
+        type: 'CAUGHT_ERROR_CHALLENGER',
         errorMessage: msg
     }
 }

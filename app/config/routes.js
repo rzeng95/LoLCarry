@@ -15,7 +15,7 @@ const store = configureStore();
 var routes = (
     <Provider store={store}>
         <Router history={browserHistory}>
-            <Route path='/' component={Main}>
+            <Route path="/" component={Main}>
                 <IndexRoute component={ChallengerListContainer} />
                 <Route path="/:region/:player" component={CurrentTableContainer} />
                 <Route path="/about" component={About} />

@@ -53,6 +53,8 @@ module.exports = function(region, done) {
                         cb(null, 'IN_GAME');
                     } else if (res.statusCode === 404){
                         cb(null, 'NOT_IN_GAME');
+                    } else if (err) {
+                        cb(err, null);
                     } else {
                         cb(`Unexpected Error: ${res.statusCode}`, null);
                     }
@@ -65,8 +67,11 @@ module.exports = function(region, done) {
                     for (let i = 0; i < challengerList.length; i++) {
                         challengerList[i].inGame = inGameArray[i];
                         if (inGameArray[i] === 'IN_GAME') {
-                            challengerList[i].inGameURL =
-                            `http://www.lolcarry.io/${region}/${challengerList[i].playerOrTeamName}`;
+                            let name = challengerList[i].playerOrTeamName;
+                            name = name.replace(/\s+/g, '').toLowerCase();
+                            challengerList[i].inGameURL = `/${region}/${name}`;
+
+                            //`http://www.lolcarry.io/${region}/${challengerList[i].playerOrTeamName}`;
                         }
                     }
 
