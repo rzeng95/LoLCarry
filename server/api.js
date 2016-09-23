@@ -3,12 +3,14 @@
 const async = require('async');
 
 const helpers = require('./helpers');
+const getChallengerList = require('./getChallengerList');
 
-const ENV = ( process.env.NODE_ENV || 'development' ).trim();
+// const ENV = ( process.env.NODE_ENV || 'development' ).trim();
 
 const RateLimiter  = require('limiter').RateLimiter;
 // Dev key allows us 10 requests per 10 seconds (10 000 ms)
-const limiter = new RateLimiter(10, 10000);
+// Production key allows us 3000 requests per 10 seconds
+const limiter = new RateLimiter(3000, 10000);
 
 module.exports = function(app) {
 
@@ -55,10 +57,11 @@ module.exports = function(app) {
             },
 
             function fetchSummonerLevelWrapper(blob, summonerIDList, region, cb) {
-
-                helpers.fetchSummonerLevel(blob, summonerIDList, region, (err, json) => {
-                    err ? cb(err, null) : cb(null, json);
-                })
+                limiter.removeTokens(1, (err, remainingRequests) => {
+                    helpers.fetchSummonerLevel(blob, summonerIDList, region, (err, json) => {
+                        err ? cb(err, null) : cb(null, json);
+                    })
+                });
             },
 
             function fetchPicturesWrapper(blob, cb) {
@@ -96,6 +99,21 @@ module.exports = function(app) {
 
     });
 
+
+    app.get('/api/getChallengerlist/:region', (req, res) => {
+        const region = req.params.region;
+
+        limiter.removeTokens(201, (err, remainingRequests) => {
+
+            getChallengerList(region, (err, output) => {
+                err
+                ? res.status(299).send(err)
+                : res.status(200).send(output);
+
+            });
+
+        })
+    });
 
     app.get('/api/test', (req,res) => {
         res.send('Hello!');

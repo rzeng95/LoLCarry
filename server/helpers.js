@@ -12,7 +12,7 @@ const rankedModes = constants.rankedModes;
 
 // The real key has been uploaded as a Heroku config and is not available.
 // For local development, the key is stored in gitignore'd file SECRET.js
-const API_KEY = process.env.API_KEY || require('../SECRET').DEV_LOCAL_KEY;
+const API_KEY = process.env.API_KEY || require('../SECRET').PRODUCTION_LOCAL_KEY;
 
 
 
