@@ -55,6 +55,7 @@ const constants = {
         313 : 'Black Market Brawlers',
         315 : 'Nexus Siege',
         317 : 'Definitely Not Dominion',
+        318 : 'All Random URF',
         400 : 'Normal 5v5',
         410 : 'Ranked Solo 5v5'
     },
