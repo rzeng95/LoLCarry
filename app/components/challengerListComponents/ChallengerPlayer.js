@@ -4,14 +4,11 @@ import { Link } from 'react-router';
 const ChallengerPlayer = (props) => {
     let spectate;
     if (props.inGameURL) {
-        //spectate = <Link to={""+props.inGameURL}><span className="glyphicon glyphicon-eye-open" aria-hidden="true"></span></Link>
         spectate = <Link to={""+props.inGameURL}><span className="glyphicon glyphicon-eye-open" aria-hidden="true"></span></Link>
     }
 
     return (
         <tr>
-            {/* <td>{props.inGameURL}</td> */}
-            {/* <span className="glyphicon glyphicon-eye-open"></span> */}
             <td>{spectate}</td>
             <td>{props.rank}</td>
             <td>{props.playerName}</td>

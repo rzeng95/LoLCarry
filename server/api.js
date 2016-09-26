@@ -85,6 +85,14 @@ module.exports = function(app) {
                 helpers.splitTeams(blob, (err, json) => {
                     cb(null, json);
                 })
+            },
+            function fetchChampionKDAWrapper(blob, cb) {
+                limiter.removeTokens(10, (err, remainingRequests) => {
+                    helpers.fetchChampionKDA(blob, (err, json) => {
+                        err ? cb(err, null) : cb(null, json);
+                    })
+
+                });
             }
 
         ], (err, success) => {

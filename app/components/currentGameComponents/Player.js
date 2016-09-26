@@ -2,47 +2,73 @@ import React, { PropTypes } from 'react';
 
 import '../../styles/main.css';
 
+import ColumnAlignment from './ColumnAlignment';
+
 import RunesIcon from '../../assets/Runes.png';
 import MasteriesIcon from '../../assets/Masteries.png';
 
-const Player = (props) =>
+const Player = (props) => {
+    let rankDisplay;
+    props.playerBlob.rank.lp
+    ? rankDisplay =
+    <td>{props.playerBlob.rank.rank} (<b>{props.playerBlob.rank.lp}</b>)</td>
 
-    <table className="table table-nested" style={{"backgroundColor":"beige"}}>
-        <colgroup>
-            {/* summoner name  */}
-            <col className="col-lg-2 col-md-2 col-sm-3 col-xs-3" />
+    : rankDisplay =
+    <td>{props.playerBlob.rank.rank}</td>
 
-            {/* champion name and portrait */}
-            <col className="col-lg-1 col-md-2 col-sm-2 col-xs-3" />
+    return (
+        <table className="table table-nested" style={{"backgroundColor":"beige"}}>
+            <ColumnAlignment />
 
-            {/* player elo   */}
-            <col className="col-lg-3 col-md-3 col-sm-3 col-xs-3" />
+            <tbody>
+                <tr>
+                    {/* summoner name  */}
+                    <td>
+                        {props.playerBlob.summonerName}
+                    </td>
 
-            {/* runes  */}
-            <col className="col-lg-1 col-md-1 col-sm-1 col-xs-1" />
+                    {/* champion name and portrait */}
+                    <td>
+                        <img src={props.playerBlob.championURL}
+                             height="25" width="25"
+                             style={{float: "left"}} />
+                        <p style={{paddingLeft: "10px",float: "left"}}>
+                            {props.playerBlob.championName} (<b>{props.playerBlob.championGames}</b>)
+                        </p>
+                    </td>
+                    {rankDisplay}
+                    {/* player elo   */}
+                    {/* <td>
+                        {props.playerBlob.rank.rank} (<b>{props.playerBlob.rank.lp}</b>)
+                        {rankDisplay}
+                    </td> */}
 
-            {/* masteries  */}
-            <col className="col-lg-1 col-md-1 col-sm-1 col-xs-1" />
-        </colgroup>
-        <tbody>
-            <tr>
-                <td>
-                    {props.playerBlob.summonerName}
-                </td>
-                <td>
-                    <img src={props.playerBlob.championURL}
-                         height="25" width="25"
-                         style={{float: "left"}} />
-                    <p style={{paddingLeft: "10px",float: "left"}}>
-                        {props.playerBlob.championName}
-                    </p>
-                </td>
+                    {/* champion KDA   */}
+                    <td style={{"textAlign":"center"}}>
+                        {props.playerBlob.championKDA}
+                    </td>
 
-                <td>{props.playerBlob.rank.rank}</td>
-                <td><img className="small-icon" height="25" width="25" src={RunesIcon}/></td>
-                <td><img className="small-icon" height="25" width="25" src={MasteriesIcon}/></td>
-            </tr>
-        </tbody>
-    </table>
+                    {/* runes  */}
+                    <td style={{"textAlign":"center"}}>
+                        <img
+                        className="small-icon"
+                        height="25" width="25"
+                        style={{"margin":"0 8px 0 8px"}}
+                        src={RunesIcon} />
+                        <img
+                        className="small-icon"
+                        height="25" width="25"
+                        style={{"marginLeft":"0 8px 0 8px"}}
+                        src={MasteriesIcon} />
+                    </td>
 
+                    {/* masteries  */}
+                    {/* <td style={{"textAlign":"center"}}>
+                        <img className="small-icon" height="25" width="25" src={MasteriesIcon}/>
+                    </td> */}
+                </tr>
+            </tbody>
+        </table>
+    )
+}
 export default Player;

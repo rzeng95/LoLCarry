@@ -9,6 +9,7 @@ const apiVersions = constants.apiVersions;
 const regionMap = constants.regions;
 const gameModes = constants.gameModes;
 const rankedModes = constants.rankedModes;
+const season = constants.currentSeason;
 
 // The real key has been uploaded as a Heroku config and is not available.
 // For local development, the key is stored in gitignore'd file SECRET.js
@@ -236,7 +237,7 @@ const helpers = {
                 for (let i = 0; i < blob.participants.length; i++) {
                     blob.participants[i].rank = { rank: 'Unranked' };
                 }
-                done(null, blob);
+                done(null, blob, summonerIDList, region);
             } else if (res.statusCode !== 200 && res.statusCode !== 404) {
                 done(['fetchParticipants', res.statusCode]);
             } else {
@@ -256,13 +257,15 @@ const helpers = {
                         let wins = json[idToFind][0].entries[0].wins;
                         let losses = json[idToFind][0].entries[0].losses;
 
-                        let rank = `${tier} ${division} (${lp} LP)`;
+                        let rank = `${tier} ${division} `;
+                        lp = `${lp} LP`;
                         let wl = `${wins} / ${losses}`;
 
                         let series = json[idToFind][0].entries[0].miniSeries;
                         if (series) {
                             blob.participants[i].rank = {
                                 rank: rank,
+                                lp: lp,
                                 wl: wl,
                                 series: {
                                     target: series.target,
@@ -274,6 +277,7 @@ const helpers = {
                         } else {
                             blob.participants[i].rank = {
                                 rank: rank,
+                                lp: lp,
                                 wl: wl
                             };
                         }
@@ -313,6 +317,7 @@ const helpers = {
                 done(null, blob);
 
             } else {
+                console.log(res.statusCode)
                 done(['fetchSummonerLevel', null])
             }
         })
@@ -383,6 +388,72 @@ const helpers = {
         blob['blueSideParticipants'] = blueSideParticipants;
         blob['redSideParticipants'] = redSideParticipants;
         done(null, blob);
+    }, //end splitTeams
+
+    fetchChampionKDA: function(blob, done) {
+        let region = Object.keys(regionMap).filter((key)=>regionMap[key]===blob.platformId)[0];
+        //console.log(region);
+        blob['region'] = region;
+        //get champ ID array
+        async.map(blob.participants, (player, cb) => {
+            let summonerID = player.summonerId;
+            let champID = player.championId;
+            //get player ranked stats
+            //then find the champion ID
+            let url = `https://${region}.api.pvp.net/api/lol/${region}/` +
+            `v${apiVersions.statsVersion}/stats/by-summoner/` +
+            `${summonerID}/ranked?season=SEASON${season}&api_key=${API_KEY}`;
+            request(url, (err, res, output) => {
+                if (err) {
+                    cb(err, null);
+                } else if (res.statusCode === 404){
+                    cb(null, [0, '0 / 0 / 0']);
+                } else if (res.statusCode !== 200) {
+                    cb(`fetchChampionKDA Error: ${res.statusCode}`, null);
+                } else {
+                    let json = JSON.parse(output);
+                    let t = 0;
+                    let w = 0;
+                    let l = 0;
+                    let k = 0;
+                    let d = 0;
+                    let a = 0;
+                    for (let i = 0; i < json.champions.length; i++) {
+                        if (json.champions[i].id === champID) {
+                            t = json.champions[i].stats.totalSessionsPlayed;
+                            w = json.champions[i].stats.totalSessionsWon;
+                            l = json.champions[i].stats.totalSessionsLost;
+                            k = json.champions[i].stats.totalChampionKills / t;
+                            d = json.champions[i].stats.totalDeathsPerSession / t;
+                            a = json.champions[i].stats.totalAssists / t;
+                            k = Math.round(k * 10) / 10;
+                            d = Math.round(d * 10) / 10;
+                            a = Math.round(a * 10) / 10;
+
+                        }
+                    }
+                    //console.log([t, `${k} / ${d} / ${a}`])
+                    //console.log('---')
+                    //cb(null, [0,0])
+                    cb(null, [t, `${k} / ${d} / ${a}`]);
+                }
+            });
+
+        }, (err, finalArray) => {
+            if (err) {
+                done(err, null);
+            } else {
+
+                for (let i = 0; i < blob.participants.length; i++) {
+
+                    blob.participants[i]['championGames'] = finalArray[i][0];
+                    blob.participants[i]['championKDA'] = finalArray[i][1];
+                }
+                done(null, blob);
+            }
+
+        })
+
     }
 };
 

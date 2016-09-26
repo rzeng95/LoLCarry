@@ -66,6 +66,12 @@ a:active {
 .table tbody tr td {
     padding: 4px;
 }
+.table tbody tr th {
+    border-top: 0;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 4px;
+}
 .small-icon {
     width: 28px;
     height: 28px;

@@ -17,8 +17,11 @@ const constants = {
         summonerByNameVersion : 1.4,
         leagueVersion : 2.5,
         staticVersion : 1.2,
-        challengerListVersion : 2.5
+        challengerListVersion : 2.5,
+        statsVersion : 1.3
     },
+
+    currentSeason: '2016',
 
     gameModes: {
         0   : 'Custom Game',
