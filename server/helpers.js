@@ -265,6 +265,7 @@ const helpers = {
                         if (series) {
                             blob.participants[i].rank = {
                                 rank: rank,
+                                tier: tier.toLowerCase(),
                                 lp: lp,
                                 wl: wl,
                                 series: {
@@ -277,6 +278,7 @@ const helpers = {
                         } else {
                             blob.participants[i].rank = {
                                 rank: rank,
+                                tier: tier.toLowerCase(),
                                 lp: lp,
                                 wl: wl
                             };

@@ -6,15 +6,53 @@ import ColumnAlignment from './ColumnAlignment';
 
 import RunesIcon from '../../assets/Runes.png';
 import MasteriesIcon from '../../assets/Masteries.png';
-
+import bronze from '../../assets/bronze.png';
+import silver from '../../assets/silver.png';
+import gold from '../../assets/gold.png';
+import platinum from '../../assets/platinum.png';
+import diamond from '../../assets/diamond.png';
+import master from '../../assets/master.png';
+import challenger from '../../assets/challenger.png';
+import provisional from '../../assets/provisional.png';
+//props.playerBlob.rank.tier
 const Player = (props) => {
     let rankDisplay;
+    let tierImage;
+
+    tierImage = platinum;
+    switch(props.playerBlob.rank.tier) {
+        case 'bronze':
+            tierImage = bronze; break;
+        case 'silver':
+            tierImage = silver; break;
+        case 'gold':
+            tierImage = gold; break;
+        case 'platinum':
+            tierImage = platinum; break;
+        case 'diamond':
+            tierImage = diamond; break;
+        case 'challenger':
+            tierImage = challenger; break;
+        default:
+            tierImage = provisional;
+    }
+
     props.playerBlob.rank.lp
     ? rankDisplay =
-    <td>{props.playerBlob.rank.rank} (<b>{props.playerBlob.rank.lp}</b>)</td>
+    <td>
+        <img src={tierImage}
+             height="28" width="28"
+             style={{float: "left","marginRight":"10px"}} />
+        <p>{props.playerBlob.rank.rank} (<b>{props.playerBlob.rank.lp}</b>)</p>
+    </td>
 
     : rankDisplay =
-    <td>{props.playerBlob.rank.rank}</td>
+    <td>
+        <img src={provisional}
+             height="28" width="28"
+             style={{float: "left","marginRight":"10px"}} />
+        <p>{props.playerBlob.rank.rank}</p>
+    </td>
 
     return (
         <table className="table table-nested" style={{"backgroundColor":"beige"}}>
@@ -30,9 +68,9 @@ const Player = (props) => {
                     {/* champion name and portrait */}
                     <td>
                         <img src={props.playerBlob.championURL}
-                             height="25" width="25"
+                             height="28" width="28"
                              style={{float: "left"}} />
-                        <p style={{paddingLeft: "10px",float: "left"}}>
+                        <p style={{paddingLeft: "10px","float": "left"}}>
                             {props.playerBlob.championName} (<b>{props.playerBlob.championGames}</b>)
                         </p>
                     </td>
