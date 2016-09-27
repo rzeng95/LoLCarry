@@ -17,6 +17,7 @@ export const changeRegionAction = (newRegion) => {
 export const requestChallengerListAction = (region) => dispatch => {
     dispatch(changeRegionAction(region));
     dispatch(enableLoadingAction());
+    dispatch(toggleVisibilityAction('SHOW_ALL'));
 
     region = region.toLowerCase();
 
@@ -43,5 +44,12 @@ export const receivedCaughtError = (msg) => {
     return {
         type: 'CAUGHT_ERROR_CHALLENGER',
         errorMessage: msg
+    }
+}
+
+export const toggleVisibilityAction = (view) => {
+    return {
+        type: 'TOGGLE_VISIBILITY_CHALLENGER',
+        view: view
     }
 }

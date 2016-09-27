@@ -2,7 +2,8 @@ const initialState = {
     isLoading: true,
     data: [],
     errorMessage: null,
-    region: 'na'
+    region: 'na',
+    view: 'SHOW_ALL'
 }
 
 export default function challengerList (state=initialState, action) {
@@ -31,6 +32,12 @@ export default function challengerList (state=initialState, action) {
             return Object.assign({}, state, {
                 region: action.region
             })
+
+        case 'TOGGLE_VISIBILITY_CHALLENGER':
+            return Object.assign({}, state, {
+                view: action.view
+            })
+
         default:
             return state;
     }

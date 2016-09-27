@@ -73,35 +73,17 @@ module.exports = function(region, done) {
                             name = name.replace(/\s+/g, '').toLowerCase();
                             challengerList[i].inGameURL = `/${region}/${name}`;
 
-                            //`http://www.lolcarry.io/${region}/${challengerList[i].playerOrTeamName}`;
                         }
+                        challengerList[i]['ranking'] = i+1;
                     }
 
                     done(null, challengerList);
                 }
             }); // end async.map
 
-
-
-            // let tempID = 77759242;
-            // isInGame(tempID, region, (err, answer) => {
-            //     if (err) {
-            //         done(err, null);
-            //     } else {
-            //         console.log(answer);
-            //     }
-            // })
-
-
-            //done(null, challengerList);
         } else {
             done(`Error while fetching challenger list: ${res.statusCode}`, null);
         }
     })
 
-
-
-    // on success, return done(null, result)
-
-    // on failure, return done(err, null)
 }
