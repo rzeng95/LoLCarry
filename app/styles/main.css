@@ -65,6 +65,11 @@ a:active {
 
 .table tbody tr td {
     padding: 4px;
+    line-height: 28px;
+}
+
+p {
+    margin: 0 0 0;
 }
 .table tbody tr th {
     border-top: 0;

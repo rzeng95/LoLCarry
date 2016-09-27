@@ -31,6 +31,8 @@ const Player = (props) => {
             tierImage = platinum; break;
         case 'diamond':
             tierImage = diamond; break;
+        case 'master':
+            tierImage = master; break;
         case 'challenger':
             tierImage = challenger; break;
         default:
