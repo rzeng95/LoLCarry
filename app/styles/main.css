@@ -22,7 +22,7 @@ a:active {
 /* Allows for in-window vertical scroll */
 #scroll-list{
     overflow:scroll;
-    height:calc(100vh - 80px);
+    height:calc(100vh - 181px);
     overflow-x: hidden;
 }
 

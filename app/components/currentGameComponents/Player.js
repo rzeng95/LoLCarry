@@ -76,12 +76,8 @@ const Player = (props) => {
                             {props.playerBlob.championName} (<b>{props.playerBlob.championGames}</b>)
                         </p>
                     </td>
+
                     {rankDisplay}
-                    {/* player elo   */}
-                    {/* <td>
-                        {props.playerBlob.rank.rank} (<b>{props.playerBlob.rank.lp}</b>)
-                        {rankDisplay}
-                    </td> */}
 
                     {/* champion KDA   */}
                     <td style={{"textAlign":"center"}}>
@@ -102,10 +98,6 @@ const Player = (props) => {
                         src={MasteriesIcon} />
                     </td>
 
-                    {/* masteries  */}
-                    {/* <td style={{"textAlign":"center"}}>
-                        <img className="small-icon" height="25" width="25" src={MasteriesIcon}/>
-                    </td> */}
                 </tr>
             </tbody>
         </table>
