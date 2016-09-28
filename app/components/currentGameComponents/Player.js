@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import ReactTooltip from 'react-tooltip';
 
 import '../../styles/main.css';
 
@@ -90,12 +91,27 @@ const Player = (props) => {
                         className="small-icon"
                         height="25" width="25"
                         style={{"margin":"0 8px 0 8px"}}
-                        src={RunesIcon} />
+                        src={RunesIcon}
+                        data-tip data-for="runesTooltip" />
+
                         <img
                         className="small-icon"
                         height="25" width="25"
                         style={{"marginLeft":"0 8px 0 8px"}}
-                        src={MasteriesIcon} />
+                        src={MasteriesIcon}
+                        data-tip data-for="masteriesTooltip" />
+
+                        <ReactTooltip id="runesTooltip" place="left" type="dark" effect="solid">
+                            <div style={{"textAlign":"left"}}>
+                                <p><b>Runes</b></p>
+                                <p>One set of runes</p>
+                                <p>One set of runes</p>
+                            </div>
+                        </ReactTooltip>
+
+                        <ReactTooltip id="masteriesTooltip" place="left" type="dark" effect="solid">
+                            <p>oh hello!</p>
+                        </ReactTooltip>
                     </td>
 
                 </tr>
