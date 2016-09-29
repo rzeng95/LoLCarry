@@ -10,7 +10,7 @@ if (ENV === 'production') {
 
     Raven.config(sentryURL).install();
 } else {
-    console.log('Raven issue tracking is DISABLED');
+    console.log('Sentry issue tracking is DISABLED');
 }
 
 

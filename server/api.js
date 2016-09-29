@@ -91,8 +91,12 @@ module.exports = function(app) {
                     helpers.fetchChampionKDA(blob, (err, json) => {
                         err ? cb(err, null) : cb(null, json);
                     })
-
                 });
+            },
+            function fetchPlayerRunesWrapper(blob, cb) {
+                helpers.fetchPlayerRunes(blob, (err, json) => {
+                    err ? cb(err, null) : cb(null, json);
+                })
             }
 
         ], (err, success) => {

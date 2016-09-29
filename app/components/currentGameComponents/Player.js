@@ -19,6 +19,7 @@ import provisional from '../../assets/provisional.png';
 const Player = (props) => {
     let rankDisplay;
     let tierImage;
+    let runes;
 
     tierImage = platinum;
     switch(props.playerBlob.rank.tier) {
@@ -57,6 +58,20 @@ const Player = (props) => {
         <p>{props.playerBlob.rank.rank}</p>
     </td>
 
+    runes = props.playerBlob.runes.map((rune)=> rune.runeName);
+    //let blah = runes.map( (rune, id) => <p key={id}>{rune}</p>);
+    //console.log(runes);
+    //console.log('--');
+    //runes = props.playerBlob.runes.map((rune, id) => <p key={id}>hi im a dank rune hi im a dank rune</p>)
+    //runes = ['im a dank rune', 'im also a dank rune'];
+    // runes =
+    // <div>
+    // <p>hi im a dank rune hi im a dank rune</p>
+    // <p>hi im a dank rune hi im a dank rune</p>
+    // <p>hi im a dank rune hi im a dank rune</p>
+    // <p>hi im a dank rune hi im a dank rune</p>
+    // </div>
+
     return (
         <table className="table table-nested" style={{"backgroundColor":"beige"}}>
             <ColumnAlignment />
@@ -92,7 +107,7 @@ const Player = (props) => {
                         height="25" width="25"
                         style={{"margin":"0 8px 0 8px"}}
                         src={RunesIcon}
-                        data-tip data-for="runesTooltip" />
+                        data-tip data-for={"runesTooltip"+props.playerBlob.summonerName} />
 
                         <img
                         className="small-icon"
@@ -101,16 +116,17 @@ const Player = (props) => {
                         src={MasteriesIcon}
                         data-tip data-for="masteriesTooltip" />
 
-                        <ReactTooltip id="runesTooltip" place="left" type="dark" effect="solid">
-                            <div style={{"textAlign":"left"}}>
-                                <p><b>Runes</b></p>
-                                <p>One set of runes</p>
-                                <p>One set of runes</p>
-                            </div>
+                        <ReactTooltip id={"runesTooltip"+props.playerBlob.summonerName} place="left" type="dark" effect="solid">
+                            <p style={{"textAlign":"left"}}><b>Runes</b></p>
+                            {props.playerBlob.runes.map((rune, id) =>
+                                <p key={id} style={{"textAlign":"left"}}>{rune.count} {rune.runeName}</p>
+                            )}
+
                         </ReactTooltip>
 
                         <ReactTooltip id="masteriesTooltip" place="left" type="dark" effect="solid">
-                            <p>oh hello!</p>
+                            <p><b>Masteries</b></p>
+                            <p>11 - 15 - 0</p>
                         </ReactTooltip>
                     </td>
 

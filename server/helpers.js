@@ -400,8 +400,7 @@ const helpers = {
         async.map(blob.participants, (player, cb) => {
             let summonerID = player.summonerId;
             let champID = player.championId;
-            //get player ranked stats
-            //then find the champion ID
+
             let url = `https://${region}.api.pvp.net/api/lol/${region}/` +
             `v${apiVersions.statsVersion}/stats/by-summoner/` +
             `${summonerID}/ranked?season=SEASON${season}&api_key=${API_KEY}`;
@@ -434,9 +433,7 @@ const helpers = {
 
                         }
                     }
-                    //console.log([t, `${k} / ${d} / ${a}`])
-                    //console.log('---')
-                    //cb(null, [0,0])
+
                     cb(null, [t, `${k} / ${d} / ${a}`]);
                 }
             });
@@ -454,6 +451,36 @@ const helpers = {
                 done(null, blob);
             }
 
+        })
+
+    }, //end fetch champion KDA
+
+    fetchPlayerRunes: function(blob, done) {
+        const version = apiVersions.staticVersion;
+        const url = `https://global.api.pvp.net/api/lol/static-data/` +
+                    `na/v${version}/rune?api_key=${API_KEY}`
+
+        request(url, (err, res, output) => {
+            if (err) {
+                done(err, null);
+            } else if (res.statusCode !== 200) {
+                done(res.statusCode, null);
+            } else {
+                const globalRunesList = JSON.parse(output).data;
+
+                for (let i = 0; i < blob.participants.length; i++) {
+                    let runesArray = blob.participants[i].runes;
+                    for (let j = 0; j < runesArray.length; j++) {
+                        let runeID = runesArray[j].runeId;
+                        let runeName = globalRunesList[runeID].name;
+                        blob.participants[i].runes[j]['runeName'] = runeName;
+                    }
+                }
+
+                done(null, blob);
+
+
+            }
         })
 
     }
