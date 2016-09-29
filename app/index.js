@@ -6,7 +6,7 @@ import Raven from 'raven-js';
 const ENV = ( process.env.NODE_ENV || 'development' ).trim();
 
 if (ENV === 'production') {
-    const sentryURL = process.env.SENTRY_URL || require('../SECRET').SENTRY_URL;
+    const sentryURL = process.env.SENTRY_URL;
 
     Raven.config(sentryURL).install();
 } else {
