@@ -15,13 +15,30 @@ import diamond from '../../assets/diamond.png';
 import master from '../../assets/master.png';
 import challenger from '../../assets/challenger.png';
 import provisional from '../../assets/provisional.png';
+
+import Warlords from '../../assets/6161.png';
+import Fervor from '../../assets/6162.png';
+import Deathfire from '../../assets/6164.png';
+
+import Stormraiders from '../../assets/6361.png';
+import Thunderlords from '../../assets/6362.png';
+import Windspeakers from '../../assets/6363.png';
+
+import Grasp from '../../assets/6261.png';
+import Strength from '../../assets/6262.png';
+import Bond from '../../assets/6263.png';
+
+import NoKeystone from '../../assets/nokeystone.png';
+
+
 //props.playerBlob.rank.tier
 const Player = (props) => {
     let rankDisplay;
     let tierImage;
     let runes;
+    let keystone;
 
-    tierImage = platinum;
+    //tierImage = platinum;
     switch(props.playerBlob.rank.tier) {
         case 'bronze':
             tierImage = bronze; break;
@@ -59,18 +76,29 @@ const Player = (props) => {
     </td>
 
     runes = props.playerBlob.runes.map((rune)=> rune.runeName);
-    //let blah = runes.map( (rune, id) => <p key={id}>{rune}</p>);
-    //console.log(runes);
-    //console.log('--');
-    //runes = props.playerBlob.runes.map((rune, id) => <p key={id}>hi im a dank rune hi im a dank rune</p>)
-    //runes = ['im a dank rune', 'im also a dank rune'];
-    // runes =
-    // <div>
-    // <p>hi im a dank rune hi im a dank rune</p>
-    // <p>hi im a dank rune hi im a dank rune</p>
-    // <p>hi im a dank rune hi im a dank rune</p>
-    // <p>hi im a dank rune hi im a dank rune</p>
-    // </div>
+
+    switch(props.playerBlob.keystoneID) {
+        case '6161':
+            keystone = Warlords; break;
+        case '6162':
+            keystone = Fervor; break;
+        case '6164':
+            keystone = Deathfire; break;
+        case '6361':
+            keystone = Stormraiders; break;
+        case '6362':
+            keystone = Thunderlords; break;
+        case '6363':
+            keystone = Windspeakers; break;
+        case '6261':
+            keystone = Grasp; break;
+        case '6262':
+            keystone = Strength; break;
+        case '6263':
+            keystone = Bond; break;
+        default:
+            keystone = NoKeystone;
+    }
 
     return (
         <table className="table table-nested" style={{"backgroundColor":"beige"}}>
@@ -113,8 +141,8 @@ const Player = (props) => {
                         className="small-icon"
                         height="25" width="25"
                         style={{"marginLeft":"0 8px 0 8px"}}
-                        src={MasteriesIcon}
-                        data-tip data-for="masteriesTooltip" />
+                        src={keystone}
+                        data-tip data-for={"masteriesTooltip"+props.playerBlob.summonerName} />
 
                         <ReactTooltip id={"runesTooltip"+props.playerBlob.summonerName} place="left" type="dark" effect="solid">
                             <p style={{"textAlign":"left"}}><b>Runes</b></p>
@@ -124,9 +152,10 @@ const Player = (props) => {
 
                         </ReactTooltip>
 
-                        <ReactTooltip id="masteriesTooltip" place="left" type="dark" effect="solid">
-                            <p><b>Masteries</b></p>
-                            <p>11 - 15 - 0</p>
+                        <ReactTooltip id={"masteriesTooltip"+props.playerBlob.summonerName} place="left" type="dark" effect="solid">
+                            <p style={{"textAlign":"left"}}><b>Masteries</b></p>
+                            <p style={{"textAlign":"left"}}>{props.playerBlob.masteryDistribution}</p>
+                            <p style={{"textAlign":"left"}}>{props.playerBlob.keystoneName}</p>
                         </ReactTooltip>
                     </td>
 

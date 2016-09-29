@@ -483,6 +483,97 @@ const helpers = {
             }
         })
 
+    }, //end fetchPlayerRunes
+    fetchPlayerMasteries: function(blob, done) {
+        const version = apiVersions.staticVersion;
+        const url = `https://global.api.pvp.net/api/lol/static-data/` +
+                    `na/v${version}/mastery?masteryListData=masteryTree&api_key=${API_KEY}`;
+
+        request(url, (err, res, output) => {
+            if (err) {
+                done(err, null);
+            } else if (res.statusCode !== 200) {
+                done(res.statusCode, null);
+            } else {
+                const globalMasteriesList = JSON.parse(output).data;
+
+
+                for (let i = 0; i < blob.participants.length; i++) {
+                    let ferocity = 0;
+                    let resolve = 0;
+                    let cunning = 0;
+                    let masteriesArray = blob.participants[i].masteries;
+                    for (let j = 0; j < masteriesArray.length; j++) {
+                        let masteryID = masteriesArray[j].masteryId;
+
+                        switch(globalMasteriesList[masteryID].masteryTree) {
+                            case 'Ferocity':
+                                ferocity = ferocity + masteriesArray[j].rank; break;
+                            case 'Resolve':
+                                resolve = resolve + masteriesArray[j].rank; break;
+                            default:
+                                cunning = cunning + masteriesArray[j].rank;
+                        }
+                    }
+                    let keystone = '';
+                    let keystoneName = '';
+                    if ( masteriesArray.find((mastery) => mastery.masteryId === 6161) ) {
+                        keystone = '6161';
+                        keystoneName = 'Warlord\'s Bloodlust';
+                    } else if ( masteriesArray.find((mastery) => mastery.masteryId === 6162) ) {
+                        keystone = '6162';
+                        keystoneName = 'Fervor of Battle';
+                    } else if ( masteriesArray.find((mastery) => mastery.masteryId === 6164) ) {
+                        keystone = '6164';
+                        keystoneName = 'Deathfire Touch';
+                    } else if ( masteriesArray.find((mastery) => mastery.masteryId === 6361) ) {
+                        keystone = '6361';
+                        keystoneName = 'Stormraider\'s Surge';
+                    } else if ( masteriesArray.find((mastery) => mastery.masteryId === 6362) ) {
+                        keystone = '6362';
+                        keystoneName = 'Thunderlord\'s Decree';
+                    } else if ( masteriesArray.find((mastery) => mastery.masteryId === 6363) ) {
+                        keystone = '6363';
+                        keystoneName = 'Windspeaker\'s Blessing';
+                    } else if ( masteriesArray.find((mastery) => mastery.masteryId === 6261) ) {
+                        keystone = '6261';
+                        keystoneName = 'Grasp of the Undying';
+                    } else if ( masteriesArray.find((mastery) => mastery.masteryId === 6262) ) {
+                        keystone = '6262';
+                        keystoneName = 'Strength of the Ages';
+                    } else if ( masteriesArray.find((mastery) => mastery.masteryId === 6263) ) {
+                        keystone = '6263';
+                        keystoneName = 'Bond of Stone';
+                    } else {
+                        console.log('no keystone found')
+                    }
+
+                    /*
+                    6161: warlord's
+                    6162: fervor
+                    6164: deathfire
+
+                    6361: stormraider's
+                    6362: thunderlord's
+                    6363: windspeaker's
+
+                    6261: grasp
+                    6262: strength of the ages
+                    6263: bond of stone
+
+                    */
+
+                    blob.participants[i]['keystoneID'] = keystone;
+                    blob.participants[i]['keystoneName'] = keystoneName;
+                    blob.participants[i]['masteryDistribution'] = `${ferocity} / ${cunning} / ${resolve}`;
+                }
+                //done(null, globalMasteriesList);
+                done(null, blob);
+
+
+            }
+        })
+
     }
 };
 

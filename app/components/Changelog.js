@@ -7,6 +7,13 @@ const Changelog = () =>
         <h3><b>Changelog</b></h3>
         <br />
 
+        <h4><b>Sep 29 2016</b></h4>
+        <p>
+            Filtering for challenger list and additional features for current-game:<br/>
+            - Challenger List now filters by "All" and "In-game."<br/>
+            - Current-game window now displays each player's runes and masteries.<br/>
+        </p>
+
         <h4><b>Sep 25 2016</b></h4>
         <p>
             Challenger List (homepage) now works for every region. New features:<br/>

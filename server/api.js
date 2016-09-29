@@ -97,6 +97,11 @@ module.exports = function(app) {
                 helpers.fetchPlayerRunes(blob, (err, json) => {
                     err ? cb(err, null) : cb(null, json);
                 })
+            },
+            function fetchPlayerMasteriesWrapper(blob, cb) {
+                helpers.fetchPlayerMasteries(blob, (err, json) => {
+                    err ? cb(err, null) : cb(null, json);
+                })
             }
 
         ], (err, success) => {
