@@ -15,6 +15,7 @@ const ChallengerList = (props) => {
         default:
             tmp = props.data;
     }
+    //console.log(tmp)
 
     return (
         props.isLoading === true

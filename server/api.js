@@ -12,10 +12,26 @@ const RateLimiter  = require('limiter').RateLimiter;
 // Production key allows us 3000 requests per 10 seconds
 const limiter = new RateLimiter(3000, 10000);
 
+const REDIS_URL = process.env.REDIS_URL || require('../SECRET').REDIS_URL;
+
+const cache = require('express-redis-cache')({
+    client: require('redis').createClient(REDIS_URL)
+})
+
+cache.on('connected', () => {
+    console.log('Successfully connected to redis cache\n');
+});
+cache.on('message', (message) => {
+  console.log(`${message}\n`);
+});
+cache.on('error', (error) => {
+    throw new Error('Cache error occured.\n');
+});
+
 module.exports = function(app) {
 
     // Get current player's game using their summoner ID
-    app.get('/api/getCurrentGame/:region/:summonerName', (req, res) => {
+    app.get('/api/getCurrentGame/:region/:summonerName', cache.route({ expire: 30 }), (req, res) => {
         const regionRaw = req.params.region;
         const nameRaw = req.params.summonerName;
 
@@ -117,7 +133,7 @@ module.exports = function(app) {
     });
 
 
-    app.get('/api/getChallengerlist/:region', (req, res) => {
+    app.get('/api/getChallengerlist/:region', cache.route({ expire: 30 }), (req, res) => {
         const region = req.params.region;
 
         limiter.removeTokens(2, (err, remainingRequests) => {
@@ -132,7 +148,7 @@ module.exports = function(app) {
         })
     });
 
-    app.get('/api/test', (req,res) => {
+    app.get('/api/test', (req, res) => {
         res.send('Hello!');
     });
 
