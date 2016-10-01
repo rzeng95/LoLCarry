@@ -5,7 +5,7 @@
 [![Discord Channel](https://img.shields.io/badge/discord-lolcarry-blue.svg?style=flat-square)](https://discord.gg/mKTTFdd)
 
 #### Live Site  
-https://www.lolcarry.io  
+www.lolcarry.io  
 
 #### Description  
 LoLCarry allows players of the game League of Legends to view in-game information about their current match. By searching up a player's username, they can view information about their teammates and opponents, including rank, champion KDA, and runes/masteries setup. The homepage contains a list of challenger (the top 200 ranked) players of each region. 
