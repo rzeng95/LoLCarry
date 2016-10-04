@@ -31,7 +31,7 @@ cache.on('error', (error) => {
 module.exports = function(app) {
 
     // Get current player's game using their summoner ID
-    app.get('/api/getCurrentGame/:region/:summonerName', cache.route({ expire: 30 }), (req, res) => {
+    app.get('/api/getCurrentGame/:region/:summonerName', (req, res) => {
         const regionRaw = req.params.region;
         const nameRaw = req.params.summonerName;
 
@@ -122,7 +122,8 @@ module.exports = function(app) {
 
         ], (err, success) => {
             if (err) {
-                res.status(299).send(err);
+                //res.status(299).send(err);
+                res.status(200).send({'err': err});
             } else {
 
                 res.status(200).send(success);
@@ -140,7 +141,7 @@ module.exports = function(app) {
 
             getChallengerList(region, (err, output) => {
                 err
-                ? res.status(299).send(err)
+                ? res.status(200).send({'err': err})
                 : res.status(200).send(output);
 
             });

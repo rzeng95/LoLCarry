@@ -12,12 +12,12 @@ import Changelog from '../components/Changelog';
 
 import configureStore from '../stores/configureStore';
 const store = configureStore();
-const history = syncHistoryWithStore(browserHistory, store);
+//const history = syncHistoryWithStore(browserHistory, store);
 
 
 var routes = (
     <Provider store={store}>
-        <Router history={history}>
+        <Router history={browserHistory}>
             <Route path="/" component={Main}>
                 <IndexRoute component={ChallengerListContainer} />
                 <Route path="/:region/:player" component={CurrentTableContainer} />

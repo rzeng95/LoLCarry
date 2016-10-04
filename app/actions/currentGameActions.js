@@ -1,30 +1,28 @@
 import axios from 'axios';
 
-
-export const enableLoadingAction = () => {
-    return {
-        type: 'ENABLE_LOADING_CURRENTGAME'
-    }
-}
-
-// add "isValidInput" action
-
-// add "request data" action
-
 export const searchForCurrentGameAction = (region, name) => dispatch => {
 
     dispatch(enableLoadingAction());
 
     axios.get(`/api/getCurrentGame/${region}/${name}`)
         .then( res => {
-            if (res.status === 200) {
-                dispatch(receivedFullData(res.data))
-            } else if (res.status === 299){
-                dispatch(receivedCaughtError(res.data))
+            if (res.status !== 200) {
+                dispatch(receivedCaughtError(res.status));
+            } else if (!res.data.err) {
+                dispatch(receivedFullData(res.data));
+            } else {
+                dispatch(receivedCaughtError(res.data.err));
             }
-
         })
-        //.catch error
+        .catch( err => {
+            dispatch(receivedCaughtError(err));
+        })
+}
+
+export const enableLoadingAction = () => {
+    return {
+        type: 'ENABLE_LOADING_CURRENTGAME'
+    }
 }
 
 export const receivedFullData = (data) => {

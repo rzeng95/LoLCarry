@@ -23,14 +23,18 @@ export const requestChallengerListAction = (region) => dispatch => {
 
     axios.get(`/api/getChallengerList/${region}`)
         .then( res => {
-            if (res.status === 200) {
-                dispatch(receivedFullData(res.data, region))
-            } else if (res.status === 299){
-                dispatch(receivedCaughtError(res.data))
+            if (res.status !== 200) {
+                dispatch(receivedCaughtError(res.status));
+            } else if (!res.data.err) {
+                dispatch(receivedFullData(res.data));
+            } else {
+                dispatch(receivedCaughtError(res.data.err));
             }
 
         })
-        //.catch error
+        .catch( err => {
+            dispatch(receivedCaughtError(err));
+        })
 }
 
 export const receivedFullData = (data, region) => {
