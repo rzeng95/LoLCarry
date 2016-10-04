@@ -35,19 +35,6 @@ describe('Get Current Game', () => {
         });
     });
 
-    // CURRENT GAME TEST
-    describe('GET /api/getCurrentGame/na/a#$^#^$#', () => {
-        it('Nonexistent player returns 299', (done) => {
-            chai.request(server)
-                .get('/api/getCurrentGame/na/a#$^#^$#')
-                .end((err,res) => {
-                    res.text.should.equal('This summoner does not exist.');
-                    res.should.have.status(299);
-                    done();
-                });
-        });
-    });
-
     // CHALLENGER LIST TEST
     describe('GET /api/getChallengerList/na', () => {
         it('Get list of challenger names', (done) => {
