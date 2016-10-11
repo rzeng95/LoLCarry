@@ -13,5 +13,8 @@ LoLCarry allows players of the game League of Legends to view in-game informatio
 #### Purpose
 I intially designed LoLCarry as a fun project to learn the [React](https://facebook.github.io/react/) library. Along the way, I applied prior knowledge and learned additional libraries to meet my needs. My React app requests data from an Express backend server, which uses Redis to cache recent requests. As my app became more complex, I realized that I needed [Redux](http://redux.js.org/) to manage state and update each React component efficiently. Redux also allowed for cool features such as the homepage *Show All / In Game* filter. The React side of the app is written exclusively in ES6 syntax, and is transpiled using Webpack/Babel. 
 
+#### Screenshot  
+<img src="http://rzeng95.github.io/lolcarry.png"/>
+
 #### Got bugs / feedback / questions?  
 Join the discord channel! (Linked above)
