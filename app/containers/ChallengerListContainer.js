@@ -29,7 +29,7 @@ class ChallengerListContainer extends Component {
     render() {
         return (
             <div>
-            <h4><i>Due to some issues with Riot's API, some endpoints are frequently returning "400 Bad Request." This means the Current Game feature does not work - I will tackle this issue within the next few weeks. Thank you for your patience.</i></h4>
+            {/* <h4><i>Due to some issues with Riot's API, some endpoints are frequently returning "400 Bad Request." This means the Current Game feature does not work - I will tackle this issue within the next few weeks. Thank you for your patience.</i></h4> */}
             <Picker
             onChange={this.handleChange} valueRegion={this.props.region}
             onToggle={this.handleToggle} valueToggle={this.props.view}/>
